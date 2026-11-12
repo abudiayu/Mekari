@@ -1,6 +1,6 @@
 ---
 lang: en,amharic, oromic,
-title: Wollo-Info Hub -- System Documentation
+title: MEKARI መካሪ -- System Documentation
 viewport: width=device-width, initial-scale=1
 ---
 
