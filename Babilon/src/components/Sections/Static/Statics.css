@@ -21,6 +21,20 @@
 
   position: relative;
   container-type: inline-size;
+
+  /* ── Right-gap fix ──
+     Always fill the full width, even if a parent (e.g. Vite's default
+     `body { display: flex; place-items: center }` or `#root` with
+     max-width / padding / text-align: center) tries to shrink or centre it.
+     Anything that sticks out sideways is clipped instead of widening the page. */
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100vw;
+  margin: 0;
+  overflow-x: clip;
+  text-align: left;
+
   padding: clamp(48px, 6vw, 88px) var(--pad) clamp(56px, 6vw, 96px);
   background: var(--page);
   color: var(--text);
@@ -36,6 +50,7 @@
 .st-inner {
   --u: calc(min(100cqw - 2 * var(--pad), 1500px) / 81.71);
   width: 100%;
+  min-width: 0;
   max-width: 1500px;
   margin: 0 auto;
 }
@@ -469,23 +484,131 @@
 .st-pending .st-head,
 .st-pending .st-foot { opacity: 0; }
 
-/* ── Tablet + phone: one column, every size scales with the card ── */
+/* ================================================================
+   RESPONSIVE
+   ≥ 60rem   three-card triptych (above)
+   36–60rem  tablet: 2-column grid, third card centred underneath
+   ≤ 36rem   phone: swipe slider with snap, next card peeks in
+   Every size scales from --card-w, so cards keep their proportions.
+   ================================================================ */
+
+/* ── Tablet + phone shared ── */
 @media (max-width: 60rem) {
-  .st-inner { --u: calc(min(100cqw - 2 * var(--pad), 26rem) / 26.42); }
+  .st-inner { --u: calc(var(--card-w) / 26.42); }
+
+  .st-card,
+  .st-card.c3 {
+    height: calc(33.81 * var(--u));
+    margin-top: 0;
+  }
+}
+
+/* ── Tablet: 2-column grid ── */
+@media (min-width: 36.01rem) and (max-width: 60rem) {
+  .st-inner {
+    --gap: clamp(1rem, 2.6cqw, 1.5rem);
+    --card-w: calc((min(100cqw - 2 * var(--pad), 46rem) - var(--gap)) / 2);
+  }
 
   .st-head,
-  .st-foot { width: min(100%, 26rem); margin-inline: auto; }
-  .st-head { flex-wrap: wrap; }
-  .st-foot { gap: .6rem; }
+  .st-foot { width: calc(2 * var(--card-w) + var(--gap)); margin-inline: auto; }
+
+  .st-cards {
+    display: grid;
+    grid-template-columns: repeat(2, var(--card-w));
+    justify-content: center;
+    gap: var(--gap);
+    height: auto;
+  }
+  .st-card.c3 {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: var(--card-w);
+  }
+}
+
+/* ── Phone: horizontal snap slider ── */
+@media (max-width: 36rem) {
+  .st-inner {
+    --card-w: min(82cqw, 22rem);
+    display: flex;
+    flex-direction: column;
+    timeline-scope: --st-x;
+  }
+  .st-head  { order: 0; align-items: flex-start; flex-wrap: wrap; row-gap: .9rem; }
+  .st-cards { order: 1; }
+  .st-foot  { order: 3; }
 
   .st-cards {
     display: flex;
-    flex-direction: column;
-    gap: clamp(1rem, 4vw, 1.5rem);
-    width: min(100%, 26rem);
+    flex-direction: row;
+    align-items: stretch;
+    gap: clamp(.75rem, 3.5cqw, 1.1rem);
     height: auto;
-    margin-inline: auto;
+    /* bleed to the screen edges so cards slide under the page margin */
+    margin-inline: calc(-1 * var(--pad));
+    padding: 1.4rem var(--pad) 1.6rem;
+    margin-block: -1.4rem -1.6rem;      /* room for the shadows, no extra gap */
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--pad);
+    scroll-timeline: --st-x inline;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
+  .st-cards::-webkit-scrollbar { display: none; }
+
   .st-card,
-  .st-card.c3 { height: auto; margin-top: 0; aspect-ratio: .781; }
+  .st-card.c3 {
+    flex: 0 0 var(--card-w);
+    width: var(--card-w);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  /* swipe progress thumb (browsers with scroll-driven animations) */
+  @supports (animation-timeline: scroll()) {
+    .st-inner::after {
+      content: "";
+      order: 2;
+      align-self: center;
+      width: 6rem;
+      height: 4px;
+      margin-top: 1.5rem;
+      border-radius: 999px;
+      background:
+        linear-gradient(var(--blue), var(--blue)) 0 0 / 34% 100% no-repeat,
+        var(--line);
+      animation: st-progress linear both;
+      animation-timeline: --st-x;
+    }
+  }
+
+  /* quick links become a swipe row too */
+  .st-foot {
+    flex-wrap: nowrap;
+    gap: .6rem;
+    margin-inline: calc(-1 * var(--pad));
+    padding-inline: var(--pad);
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-top: 0;
+    margin-top: 1.75rem;
+    padding-top: 0;
+  }
+  .st-foot::-webkit-scrollbar { display: none; }
+  .st-foot b,
+  .st-foot a { flex: 0 0 auto; }
+  .st-foot a { min-height: 40px; }
+}
+
+@keyframes st-progress {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 100% 0, 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-cards { scroll-behavior: auto; }
 }
