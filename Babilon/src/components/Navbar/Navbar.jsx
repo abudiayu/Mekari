@@ -24,6 +24,14 @@ const SearchIcon = ({ size = 22 }) => (
   </svg>
 );
 
+const UserIcon = ({ size = 18 }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill="none" aria-hidden="true"
+    stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="12" cy="8" r="4" />
+    <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7" />
+  </svg>
+);
+
 /* ── Menu data ── */
 const NAV_ITEMS = [
   {
@@ -54,12 +62,10 @@ const NAV_ITEMS = [
   },
   {
     label: 'Academics',
+    heading: 'Colleges',
     links: [
-      { label: 'Health', to: '/#' },
       { label: 'Informatics', to: '/#' },
       { label: 'Engineering', to: '/#' },
-      { label: 'Social Sciences', to: '/#' },
-      { label: 'Academic Calendar', to: '/#' },
     ],
   },
   {
@@ -87,6 +93,8 @@ const NAV_ITEMS = [
     ],
   },
 ];
+
+const LOGIN_PATH = '/login';
 
 function Navbar() {
   const navigate = useNavigate();
@@ -178,7 +186,7 @@ function Navbar() {
               onMouseLeave={closeWithDelay}
             >
               <button
-                className={`ab-navlink ab-navlink--btn ${openMenu === item.label ? 'ab-navlink-active' : ''}`}
+                className={`ab-navlink ${openMenu === item.label ? 'ab-navlink-active' : ''}`}
                 onClick={() => toggleOnClick(item.label)}
                 aria-expanded={openMenu === item.label}
                 aria-haspopup="true"
@@ -190,6 +198,7 @@ function Navbar() {
               <div className={`ab-dropdown ${openMenu === item.label ? 'ab-dropdown-open' : ''}`}>
                 <div className="ab-dropdown-inner">
                   <div className="ab-dropdown-column">
+                    <h4 className="ab-dropdown-heading">{item.heading || item.label}</h4>
                     <ul>
                       {item.links.map((link) => (
                         <li key={link.label}>
@@ -215,6 +224,12 @@ function Navbar() {
           >
             <SearchIcon />
           </button>
+
+          {/* Login (desktop) */}
+          <Link to={LOGIN_PATH} className="ab-login-btn">
+            <UserIcon />
+            <span>Login</span>
+          </Link>
         </div>
 
         {/* Mobile controls */}
@@ -335,6 +350,14 @@ function Navbar() {
             </li>
           ))}
         </ul>
+
+        {/* Login (mobile) */}
+        <div className="ab-mobile-login-wrap">
+          <Link to={LOGIN_PATH} className="ab-login-btn ab-login-btn--block" onClick={() => setMobileOpen(false)}>
+            <UserIcon size={20} />
+            <span>Login</span>
+          </Link>
+        </div>
       </div>
     </div>
   );

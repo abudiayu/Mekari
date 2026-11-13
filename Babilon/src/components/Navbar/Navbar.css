@@ -1,7 +1,7 @@
 /* ================================================================
    NAVBAR — Wollo University
    Palette:  Navy #12305a · Blue #1a5fa8 · Red #c62f3b · Slate text
-   Layout:   [Logo | Brand text] ........ [Home  Links...  | Search]
+   Layout:   [Logo | Brand text] ..... [Home  Links...  | Search  Login]
    Breakpoints:
      ≤1200px  tighter links, shorter brand
      ≤1024px  hamburger + drawer replace the link row
@@ -15,14 +15,15 @@
 .ab-navbar-container {
   --nav-h: 72px;
 
-  --navy: #12305a;        /* headings, hamburger lines */
-  --blue: #1a5fa8;        /* primary / hover / accents */
-  --blue-dark: #154f8e;   /* button hover */
-  --blue-soft: #eef4fb;   /* hover backgrounds */
-  --red: #c62f3b;         /* university name */
-  --text: #1f2d44;        /* nav link text */
-  --muted: #5b6b82;       /* icons, secondary text */
-  --line: #e3e8ef;        /* borders */
+  --navy: #12305a;
+  --blue: #1a5fa8;
+  --blue-dark: #154f8e;
+  --blue-soft: #eef4fb;
+  --red: #c62f3b;
+  --text: #1f2d44;
+  --muted: #5b6b82;
+  --line: #e3e8ef;
+  --pill: #f1f3f7;          /* gray pill behind active menu button */
   --surface: #ffffff;
 
   position: fixed;
@@ -32,7 +33,6 @@
   z-index: 200;
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
-  /* overflow must stay visible so dropdowns are not clipped */
 }
 
 .ab-navbar-container *,
@@ -132,10 +132,9 @@
   transition: color 0.15s ease, background 0.15s ease;
 }
 .ab-navlink-home:hover { color: var(--blue); background: var(--blue-soft); }
-
 .ab-navlink-home .ab-home-icon { width: 28px; height: 28px; }
 
-/* Wrapper that holds a link + its dropdown (full bar height) */
+/* Wrapper that holds a button + its dropdown (full bar height) */
 .ab-navbar-item-with-menu {
   position: relative;
   display: flex;
@@ -143,55 +142,37 @@
   height: 100%;
 }
 
+/* ── Top-level button: gray pill on hover / active ── */
 .ab-navlink {
-  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 100%;
-  padding: 0 13px;
+  height: 40px;
+  padding: 0 14px;
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
   color: var(--text);
-  text-decoration: none;
   white-space: nowrap;
   background: none;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
-  transition: color 0.15s ease;
-}
-
-/* Active / hover underline indicator */
-.ab-navlink::after {
-  content: "";
-  position: absolute;
-  left: 13px;
-  right: 13px;
-  bottom: -1px;
-  height: 3px;
-  background: var(--blue);
-  border-radius: 3px 3px 0 0;
-  transform: scaleX(0);
-  transition: transform 0.2s ease;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 
 .ab-navlink:hover,
-.ab-navlink.ab-navlink-active { color: var(--blue); }
-
-.ab-navlink:hover::after,
-.ab-navlink.ab-navlink-active::after { transform: scaleX(1); }
+.ab-navlink.ab-navlink-active {
+  color: var(--navy);
+  background: var(--pill);
+}
 
 .ab-chevron-icon {
-  color: var(--muted);
+  color: var(--navy);
   flex-shrink: 0;
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition: transform 0.2s ease;
 }
-.ab-navlink:hover .ab-chevron-icon { color: var(--blue); }
-.ab-navlink.ab-navlink-active .ab-chevron-icon {
-  transform: rotate(180deg);
-  color: var(--blue);
-}
+.ab-navlink.ab-navlink-active .ab-chevron-icon { transform: rotate(180deg); }
 
 /* Divider before search */
 .ab-nav-divider {
@@ -221,6 +202,42 @@
 }
 .ab-nav-search:hover,
 .ab-nav-search--active { color: var(--blue); background: var(--blue-soft); }
+
+/* ── Login button ── */
+.ab-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  margin-left: 10px;
+  padding: 0 18px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+  background: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 8px;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.ab-login-btn:hover {
+  background: var(--blue-dark);
+  border-color: var(--blue-dark);
+  box-shadow: 0 4px 12px rgba(26, 95, 168, 0.28);
+}
+.ab-login-btn:active { transform: translateY(1px); }
+
+/* Full-width variant inside the mobile drawer */
+.ab-login-btn--block {
+  width: 100%;
+  height: 46px;
+  margin: 0;
+  font-size: 15px;
+}
 
 /* ── Mobile controls group ── */
 .ab-navbar-right {
@@ -266,25 +283,24 @@
 .ab-hamburger--open .ab-hamburger-bar:nth-child(2) { opacity: 0; width: 0; }
 .ab-hamburger--open .ab-hamburger-bar:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-/* ── Desktop dropdown ── */
+/* ── Desktop dropdown: clean white panel ── */
 .ab-dropdown {
   position: absolute;
-  top: 100%;                 /* sits right under the bar, no hover gap */
+  top: calc(100% - 6px);
   left: 0;
   z-index: 201;
   width: max-content;
-  min-width: 240px;
+  min-width: 230px;
   max-width: min(520px, calc(100vw - 32px));
+  padding: 18px 12px 14px;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-top: 3px solid var(--blue);
-  border-radius: 0 0 10px 10px;
-  box-shadow: 0 14px 32px rgba(18, 48, 90, 0.14), 0 2px 6px rgba(18, 48, 90, 0.06);
-  padding: 10px 8px 12px;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(18, 48, 90, 0.12), 0 2px 6px rgba(18, 48, 90, 0.05);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
 }
 
@@ -304,36 +320,43 @@
 .ab-dropdown-inner { display: flex; gap: 28px; }
 .ab-dropdown-column { min-width: 200px; flex: 1; }
 
+/* Small uppercase section title (e.g. DEPARTMENTS) */
 .ab-dropdown-heading {
-  margin: 0 0 8px;
-  padding: 0 12px;
-  font-size: 13px;
+  margin: 0 0 10px;
+  padding: 0 14px;
+  font-size: 12px;
   font-weight: 700;
-  color: var(--blue);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--navy);
   white-space: nowrap;
 }
 
 .ab-dropdown-column ul {
   display: flex;
   flex-direction: column;
-  gap: 2px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* Links: no background, underline on hover */
 .ab-dropdown-column li a {
   display: block;
-  padding: 9px 12px;
-  font-size: 14px;
+  padding: 9px 14px;
+  font-size: 15px;
   font-weight: 500;
   color: var(--text);
   text-decoration: none;
   white-space: nowrap;
   border-radius: 6px;
-  transition: background 0.14s ease, color 0.14s ease;
 }
-.ab-dropdown-column li a:hover { background: var(--blue-soft); color: var(--blue); }
+.ab-dropdown-column li a:hover {
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
 
 /* ── Mobile drawer ── */
 .ab-mobile-drawer {
@@ -366,7 +389,6 @@
 
 .ab-mobile-nav { margin: 0; padding: 0; list-style: none; }
 .ab-mobile-nav-item { border-bottom: 1px solid #f0f3f8; }
-.ab-mobile-nav-item:last-child { border-bottom: none; }
 
 .ab-mobile-home-icon { display: flex; align-items: center; gap: 10px; color: var(--muted); }
 
@@ -419,6 +441,11 @@
   transition: color 0.15s ease;
 }
 .ab-mobile-sub-link:hover { color: var(--blue); }
+
+/* Login area at the bottom of the drawer */
+.ab-mobile-login-wrap {
+  padding: 16px clamp(16px, 4vw, 32px) 4px;
+}
 
 /* ── Search dropdown panel ── */
 .ab-search-dropdown {
@@ -526,6 +553,7 @@
 .ab-navlink:focus-visible,
 .ab-navlink-home:focus-visible,
 .ab-nav-search:focus-visible,
+.ab-login-btn:focus-visible,
 .ab-hamburger:focus-visible,
 .ab-search-go:focus-visible,
 .ab-search-close:focus-visible,
@@ -544,9 +572,9 @@
 @media (max-width: 1200px) {
   .ab-navbar-brand { margin-right: 12px; gap: 12px; }
   .ab-navbar-title-am { font-size: 17px; }
-  .ab-navlink { padding: 0 9px; font-size: 13.5px; }
-  .ab-navlink::after { left: 9px; right: 9px; }
+  .ab-navlink { padding: 0 10px; font-size: 13.5px; }
   .ab-nav-divider { margin: 0 8px 0 4px; }
+  .ab-login-btn { padding: 0 14px; margin-left: 6px; }
 }
 
 /* ≤ 1024px — hamburger + drawer */
