@@ -1,10 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
-
-/* To use the real Wollo logo, import it and render it inside the .logo span:
-   import logo from '../../assets/logo.png';
-   <img src={logo} alt="" />                                                   */
+import logo from '../../assets/wolloLogo.png';
 
 const COLUMNS = [
   {
@@ -174,7 +171,9 @@ function Footer() {
 
           <div className={cx(styles.col, styles.brand)}>
             <Link to="/" className={styles.brandHead} aria-label="Wollo-Info home">
-              <span className={styles.logo} aria-hidden="true">W</span>
+              <span className={styles.logo} aria-hidden="true">
+                <img src={logo} alt="" />
+              </span>
               <span className={styles.brandName}>Wollo-Info</span>
             </Link>
             <p className={styles.brandText}>
