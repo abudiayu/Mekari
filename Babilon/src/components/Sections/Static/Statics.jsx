@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import './Statics.css';
+import styles from './Statics.module.css';
+
+const cx = (...classes) => classes.filter(Boolean).join(' ');
 
 /* Decorative bar heights (index 12 is the highlighted bar) */
 const BAR_HEIGHTS = [20, 33, 48, 56, 51, 47, 39, 31, 53, 55, 60, 56, 100, 92, 76, 67, 62, 65, 59, 70, 74, 87, 83, 77];
@@ -13,7 +15,6 @@ const QUICK_LINKS = [
   { label: 'Departments', to: '/departments' },
 ];
 
-/* Orange ribbons -> navbar blue ribbons converging to one node */
 const BANDS = [
   [0.08, 0.26, 0.29, 0.32, 'rgba(160,196,235,.60)'],
   [0.23, 0.42, 0.30, 0.335, 'rgba(100,160,218,.70)'],
@@ -79,7 +80,7 @@ function FlowCanvas() {
   return (
     <canvas
       ref={ref}
-      className="st-flow"
+      className={styles['st-flow']}
       aria-label="Research outputs converging into one result"
     />
   );
@@ -88,7 +89,6 @@ function FlowCanvas() {
 function Statics() {
   const rootRef = useRef(null);
 
-  /* 'pending' -> hidden until scrolled into view, 'active' -> animating, 'done' -> normal */
   const [phase, setPhase] = useState(() =>
     typeof window !== 'undefined' &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches &&
@@ -115,7 +115,7 @@ function Statics() {
         io.disconnect();
         try {
           const vw = window.innerWidth;
-          const single = vw > 960; // three columns on desktop
+          const single = vw > 960;
           const compact = vw <= 512;
           const rise = compact ? 11 : 16;
           const place = 'cubic-bezier(.16,1,.3,1)';
@@ -124,8 +124,8 @@ function Statics() {
             if (el) anims.push(el.animate([from, to], { duration: dur, delay, easing: ease, fill: 'both' }));
           };
 
-          const cards = [...root.querySelectorAll('.st-card')];
-          // centre card leads on desktop; stacked order otherwise
+          // Query by the hashed module class name via the ref
+          const cards = [...root.querySelectorAll('[class*="st-card"]')];
           const order = single ? [1, 0, 2] : cards.map((_, i) => i);
 
           order.forEach((idx, i) => {
@@ -138,22 +138,22 @@ function Statics() {
 
             go(el, { opacity: 0, transform: `translate3d(${drift}px,${rise}px,0) scale(.985)` },
               { opacity: 1, transform: 'none' }, compact ? 780 : primary ? 960 : 900, d, place);
-            go(el.querySelector('.st-panel'),
+            go(el.querySelector('[class*="st-panel"]'),
               { opacity: 0, transform: 'scale(.994)', clipPath: `inset(0 0 ${compact ? 26 : 34}% 0)` },
               { opacity: 1, transform: 'none', clipPath: 'inset(0 0 0 0)' }, compact ? 620 : 720, d + 200, wipe);
-            go(el.querySelector('.st-copy'),
+            go(el.querySelector('[class*="st-copy"]'),
               { opacity: 0, transform: `translate3d(0,${compact ? 8 : 11}px,0)` },
               { opacity: 1, transform: 'none' }, compact ? 540 : 620, d + 330, place);
             const a = { opacity: 0, clipPath: 'inset(-30% 0 100% 0)' };
             const b = { opacity: 1, clipPath: 'inset(-30% 0 -30% 0)' };
             go(el.querySelector('h3'), a, b, compact ? 470 : 540, d + 350, wipe);
-            go(el.querySelector('.st-copy p'), a, b, compact ? 430 : 490, d + 450, wipe);
-            go(el.querySelector('.st-corner'), { opacity: 0, transform: 'scale(.88)' },
+            go(el.querySelector('[class*="st-copy"] p'), a, b, compact ? 430 : 490, d + 450, wipe);
+            go(el.querySelector('[class*="st-corner"]'), { opacity: 0, transform: 'scale(.88)' },
               { opacity: 1, transform: 'none' }, compact ? 340 : 400, d + 540, place);
           });
 
-          go(root.querySelector('.st-head'), { opacity: 0 }, { opacity: 1 }, 600, 120, place);
-          go(root.querySelector('.st-foot'), { opacity: 0 }, { opacity: 1 }, 600, single ? 520 : 300, place);
+          go(root.querySelector('[class*="st-head"]'), { opacity: 0 }, { opacity: 1 }, 600, 120, place);
+          go(root.querySelector('[class*="st-foot"]'), { opacity: 0 }, { opacity: 1 }, 600, single ? 520 : 300, place);
 
           setPhase('active');
           timer = setTimeout(finish, 4000);
@@ -176,88 +176,100 @@ function Statics() {
   return (
     <section
       ref={rootRef}
-      className={`st-section ${phase === 'pending' ? 'st-pending' : ''}`}
+      className={cx(styles['st-section'], phase === 'pending' && styles['st-pending'])}
       aria-labelledby="st-title"
     >
-      <div className="st-inner">
+      <div className={styles['st-inner']}>
         {/* ── Header ── */}
-        <header className="st-head">
+        <header className={styles['st-head']}>
           <div>
-            <span className="st-eyebrow">BY THE NUMBERS</span>
+            <span className={styles['st-eyebrow']}>BY THE NUMBERS</span>
             <h2 id="st-title">Our Impact in Numbers</h2>
-            <div className="st-rule" aria-hidden="true"><i /><i /></div>
+            <div className={styles['st-rule']} aria-hidden="true"><i /><i /></div>
           </div>
-          <Link className="st-stats-link" to="/statistics">View statistics ↗</Link>
+          <Link className={styles['st-stats-link']} to="/statistics">View statistics ↗</Link>
         </header>
 
         {/* ── Triptych ── */}
-        <div className="st-cards">
+        <div className={styles['st-cards']}>
           {/* Card 1 — graduates + QS rank */}
-          <article className="st-card">
-            <div className="st-panel" aria-label="Graduates over time chart">
-              <div className="st-timeline"><span>2007</span><i /><span>2015</span><i /><span>2025</span></div>
-              <div className="st-rank" title="QS World University Rankings">#Top 10 in East Africa</div>
-              <div className="st-bars" aria-hidden="true">
+          <article className={styles['st-card']}>
+            <div className={styles['st-panel']} aria-label="Graduates over time chart">
+              <div className={styles['st-timeline']}>
+                <span>2007</span><i /><span>2015</span><i /><span>2025</span>
+              </div>
+              <div className={styles['st-rank']} title="QS World University Rankings">
+                #Top 10 in East Africa
+              </div>
+              <div className={styles['st-bars']} aria-hidden="true">
                 {BAR_HEIGHTS.map((h, i) => (
-                  <i key={i} className={`st-bar ${i === 12 ? 'active' : ''}`} style={{ '--h': `${h}%` }} />
+                  <i
+                    key={i}
+                    className={cx(styles['st-bar'], i === 12 && styles['active'])}
+                    style={{ '--h': `${h}%` }}
+                  />
                 ))}
               </div>
-              <div className="st-chip">280K+</div>
-              <div className="st-axis"><span>START</span><span>2014</span><span>2020</span><span>TODAY</span></div>
+              <div className={styles['st-chip']}>280K+</div>
+              <div className={styles['st-axis']}>
+                <span>START</span><span>2014</span><span>2020</span><span>TODAY</span>
+              </div>
             </div>
-            <div className="st-copy">
+            <div className={styles['st-copy']}>
               <h3>All-Time Graduates</h3>
               <p>More than 280K+ graduates<br />and counting.</p>
-              <span className="st-corner"><i className="st-spark" /></span>
+              <span className={styles['st-corner']}><i className={styles['st-spark']} /></span>
             </div>
           </article>
 
-          {/* Card 2 — notable alumni (centre, leads the entrance) */}
-          <article className="st-card">
-            <div className="st-panel">
-              <div className="st-assistant">
-                <span className="st-badge"><i className="st-spark" /></span>
+          {/* Card 2 — notable alumni */}
+          <article className={styles['st-card']}>
+            <div className={styles['st-panel']}>
+              <div className={styles['st-assistant']}>
+                <span className={styles['st-badge']}><i className={styles['st-spark']} /></span>
                 <span>WOU Alumni</span>
               </div>
-              <p className="st-question">Who are our notable alumni?</p>
-              <div className="st-prompt">
+              <p className={styles['st-question']}>Who are our notable alumni?</p>
+              <div className={styles['st-prompt']}>
                 Our university has produced<br />numerous notable alumni who lead<br />across every sector.
               </div>
-              <Link className="st-cta" to="/alumni">
-                <span className="st-cta-label">View List</span>
+              <Link className={styles['st-cta']} to="/alumni">
+                <span className={styles['st-cta-label']}>View List</span>
                 <span aria-hidden="true">↗</span>
               </Link>
-              <i className="st-cursor" aria-hidden="true" />
+              <i className={styles['st-cursor']} aria-hidden="true" />
             </div>
-            <div className="st-copy">
+            <div className={styles['st-copy']}>
               <h3>WOU Notable Alumni</h3>
               <p>Our graduates lead across<br />every sector.</p>
-              <span className="st-corner"><i className="st-flow-icon" /></span>
+              <span className={styles['st-corner']}><i className={styles['st-flow-icon']} /></span>
             </div>
           </article>
 
           {/* Card 3 — research leaders */}
-          <article className="st-card c3">
-            <div className="st-panel">
-              <div className="st-metric">
-                <div className="st-metric-label">Leaders in Research</div>
-                <div className="st-metric-row"><strong>12K+</strong><span>↑ since 2014</span></div>
+          <article className={cx(styles['st-card'], styles['c3'])}>
+            <div className={styles['st-panel']}>
+              <div className={styles['st-metric']}>
+                <div className={styles['st-metric-label']}>Leaders in Research</div>
+                <div className={styles['st-metric-row']}>
+                  <strong>12K+</strong><span>↑ since 2014</span>
+                </div>
               </div>
               <FlowCanvas />
-              <div className="st-tag action">12,293 Outputs</div>
-              <div className="st-tag confidence">Research Groups &amp; Projects</div>
-              <div className="st-tag path">Publications Since 2014</div>
+              <div className={cx(styles['st-tag'], styles['action'])}>12,293 Outputs</div>
+              <div className={cx(styles['st-tag'], styles['confidence'])}>Research Groups &amp; Projects</div>
+              <div className={cx(styles['st-tag'], styles['path'])}>Publications Since 2014</div>
             </div>
-            <div className="st-copy">
+            <div className={styles['st-copy']}>
               <h3>Research Leaders</h3>
               <p>12,293 scholarly outputs<br />since 2014.</p>
-              <span className="st-corner"><i className="st-speed" /></span>
+              <span className={styles['st-corner']}><i className={styles['st-speed']} /></span>
             </div>
           </article>
         </div>
 
         {/* ── Quick links ── */}
-        <nav className="st-foot" aria-label="Quick links">
+        <nav className={styles['st-foot']} aria-label="Quick links">
           <b>QUICK LINKS:</b>
           {QUICK_LINKS.map((l) => (
             <Link key={l.label} to={l.to}>

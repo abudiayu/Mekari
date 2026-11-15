@@ -1,6 +1,6 @@
 import { useCallback, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import './Blog.css';
+import styles from './Blog.module.css';
 
 /* Images from src/assets/BlogImages  (adjust ../../ if your Blog folder is nested differently) */
 import kiotImg from '../../../assets/BlogImages/kiot.png';
@@ -55,6 +55,8 @@ const SLIDES = [
   },
 ];
 
+/* Join class names, skipping anything falsy */
+const cx = (...names) => names.filter(Boolean).join(' ');
 
 /* ── Icons ── */
 const Arrow = ({ dir = 'right' }) => (
@@ -90,10 +92,10 @@ const PauseIcon = ({ playing }) => (
 function SplitTitle({ text }) {
   let n = 0;
   return text.split(' ').map((word, wi) => (
-    <span className="bg-word" aria-hidden="true" key={wi}>
+    <span className={styles['bg-word']} aria-hidden="true" key={wi}>
       {[...word].map((ch) => {
         n += 1;
-        return <span className="bg-char" style={{ '--i': n }} key={n}>{ch}</span>;
+        return <span className={styles['bg-char']} style={{ '--i': n }} key={n}>{ch}</span>;
       })}
     </span>
   ));
@@ -140,7 +142,11 @@ function Blog() {
 
   return (
     <section
-      className={`bg-section ${paused ? 'is-paused' : ''} ${cardOpen ? 'has-card' : ''}`}
+      className={cx(
+        styles['bg-section'],
+        paused && styles['is-paused'],
+        cardOpen && styles['has-card']
+      )}
       aria-roledescription="carousel"
       aria-label="Life at Wollo University"
       onKeyDown={onKeyDown}
@@ -149,7 +155,7 @@ function Blog() {
     >
       {/* ── Photo stack ── */}
       <div
-        className="bg-stage"
+        className={styles['bg-stage']}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerCancel={() => { swipeStart.current = null; }}
@@ -157,7 +163,7 @@ function Blog() {
         {SLIDES.map((s, i) => (
           <div
             key={s.id}
-            className={`bg-slide ${i === index ? 'is-active' : ''}`}
+            className={cx(styles['bg-slide'], i === index && styles['is-active'])}
             style={{ '--tone': s.tone }}
             role="group"
             aria-roledescription="slide"
@@ -173,20 +179,20 @@ function Blog() {
             />
           </div>
         ))}
-        <div className="bg-shade" aria-hidden="true" />
+        <div className={styles['bg-shade']} aria-hidden="true" />
       </div>
 
       {/* ── Top row ── */}
-      <div className="bg-top">
-        <Link to="/campus-life" className="bg-chip">Explore life at WOU</Link>
-        <div className="bg-count" aria-hidden="true">
+      <div className={styles['bg-top']}>
+        <Link to="/campus-life" className={styles['bg-chip']}>Explore life at WOU</Link>
+        <div className={styles['bg-count']} aria-hidden="true">
           <b>{pad2(index + 1)}</b><i /><span>{pad2(count)}</span>
         </div>
       </div>
 
       {/* ── Big title ── */}
-      <div className="bg-title-wrap">
-        <h2 className="bg-title" key={slide.id} aria-label={slide.label}>
+      <div className={styles['bg-title-wrap']}>
+        <h2 className={styles['bg-title']} key={slide.id} aria-label={slide.label}>
           <SplitTitle text={slide.label} />
         </h2>
       </div>
@@ -194,7 +200,7 @@ function Blog() {
       {/* ── "+" hotspot ── */}
       <button
         type="button"
-        className={`bg-hotspot ${cardOpen ? 'is-open' : ''}`}
+        className={cx(styles['bg-hotspot'], cardOpen && styles['is-open'])}
         style={{ '--hx': slide.hotspot.x, '--hy': slide.hotspot.y }}
         aria-expanded={cardOpen}
         aria-controls="bg-card"
@@ -205,39 +211,48 @@ function Blog() {
       </button>
 
       {/* ── Info card ── */}
-      <aside id="bg-card" className={`bg-card ${cardOpen ? 'is-open' : ''}`} aria-label={slide.card.title} aria-hidden={!cardOpen}>
-        <div className="bg-card-media">
+      <aside
+        id="bg-card"
+        className={cx(styles['bg-card'], cardOpen && styles['is-open'])}
+        aria-label={slide.card.title}
+        aria-hidden={!cardOpen}
+      >
+        <div className={styles['bg-card-media']}>
           <img
             src={slide.card.image}
             alt=""
             loading="lazy"
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
           />
-          <button type="button" className="bg-card-close" aria-label="Close details" onClick={() => setCardOpen(false)}>
+          <button type="button" className={styles['bg-card-close']} aria-label="Close details" onClick={() => setCardOpen(false)}>
             <Close />
           </button>
         </div>
-        <div className="bg-card-body">
-          <span className="bg-card-tag">{slide.card.tag}</span>
+        <div className={styles['bg-card-body']}>
+          <span className={styles['bg-card-tag']}>{slide.card.tag}</span>
           <h3>{slide.card.title}</h3>
           <p>{slide.card.text}</p>
-          <Link className="bg-card-link" to={slide.card.to}>
+          <Link className={styles['bg-card-link']} to={slide.card.to}>
             View Gallery <UpRight />
           </Link>
         </div>
       </aside>
 
       {/* ── Up next (desktop) ── */}
-      <button type="button" className="bg-next" onClick={next} aria-label={`Next slide: ${upNext.label}`}>
-        <span className="bg-next-thumb" style={{ '--tone': upNext.tone, backgroundImage: `url(${upNext.image})` }} aria-hidden="true" />
-        <span className="bg-next-text"><small>Up next</small>{upNext.label}</span>
+      <button type="button" className={styles['bg-next']} onClick={next} aria-label={`Next slide: ${upNext.label}`}>
+        <span
+          className={styles['bg-next-thumb']}
+          style={{ '--tone': upNext.tone, backgroundImage: `url(${upNext.image})` }}
+          aria-hidden="true"
+        />
+        <span className={styles['bg-next-text']}><small>Up next</small>{upNext.label}</span>
       </button>
 
       {/* ── Controls ── */}
-      <div className="bg-controls">
-        <button type="button" className="bg-arrow" onClick={prev} aria-label="Previous slide"><Arrow dir="left" /></button>
+      <div className={styles['bg-controls']}>
+        <button type="button" className={styles['bg-arrow']} onClick={prev} aria-label="Previous slide"><Arrow dir="left" /></button>
 
-        <div className="bg-dots" role="tablist" aria-label="Choose slide">
+        <div className={styles['bg-dots']} role="tablist" aria-label="Choose slide">
           {SLIDES.map((s, i) => (
             <button
               key={s.id}
@@ -245,19 +260,19 @@ function Blog() {
               role="tab"
               aria-selected={i === index}
               aria-label={`Show ${s.label}`}
-              className={`bg-dot ${i === index ? 'is-on' : ''}`}
+              className={cx(styles['bg-dot'], i === index && styles['is-on'])}
               onClick={() => go(i)}
             >
-              {i === index && <span className="bg-fill" onAnimationEnd={next} />}
+              {i === index && <span className={styles['bg-fill']} onAnimationEnd={next} />}
             </button>
           ))}
         </div>
 
-        <button type="button" className="bg-arrow" onClick={next} aria-label="Next slide"><Arrow /></button>
+        <button type="button" className={styles['bg-arrow']} onClick={next} aria-label="Next slide"><Arrow /></button>
 
         <button
           type="button"
-          className="bg-pause"
+          className={styles['bg-pause']}
           aria-label={userPaused ? 'Play slideshow' : 'Pause slideshow'}
           onClick={() => setUserPaused((v) => !v)}
         >

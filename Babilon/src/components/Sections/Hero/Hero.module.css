@@ -1,9 +1,5 @@
-
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap");
-*{
-  padding: 0;
-  margin: 0;
-}
+
 /* ── Hero section ── */
 .nx-hero {
   /* scale unit: 1px at 1440px wide, clamped so text never gets tiny/huge */
@@ -11,6 +7,10 @@
 
   position: relative;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  box-sizing: border-box;
   height: 74vh;
   height: 95dvh;
   min-height: 560px;
@@ -48,10 +48,6 @@
   pointer-events: none;
 }
 
-/* ── Dark shade over the video ──
-   Covers the whole hero (above the video, below all text and the wave).
-   Darkest at the bottom-left and never fully clear.
-   Make it darker/lighter by changing the alpha values (0.88 -> 0.52). */
 .nx-shade {
   position: absolute;
   inset: 0;
@@ -67,8 +63,6 @@
     );
 }
 
-/* Desktop only: the black shade stops at the middle of the hero,
-   fading smoothly to clear at 50% width. */
 @media (min-width: 769px) and (min-aspect-ratio: 5/4) {
   .nx-shade {
     inset: 0 auto 0 0;
@@ -86,7 +80,6 @@
   }
 }
 
-/* Aspect-ratio scrims */
 @media (min-aspect-ratio: 17/10) {
   .nx-scrim {
     height: calc(450 * var(--u));
@@ -133,9 +126,7 @@
   }
 }
 
-/* ── Hero copy ──
-   All text lives in ONE wrapper (.nx-copy) and stacks in normal flow,
-   so the headline, lede and buttons can never overlap. */
+/* ── Hero copy ── */
 .nx-copy {
   position: absolute;
   left: calc(46 * var(--u));
@@ -147,7 +138,6 @@
   max-width: calc(100% - 2 * 46 * var(--u));
 }
 
-/* Eyebrow */
 .nx-eyebrow {
   display: block;
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -168,7 +158,6 @@
   max-width: 100%;
 }
 
-/* Headline: "Knowledge, Innovation, Excellence" */
 .nx-headline {
   font-family: "Playfair Display", "Georgia", "Times New Roman", serif;
   font-weight: 500;
@@ -182,7 +171,6 @@
   text-wrap: balance;
 }
 
-/* "Innovation" — gold italic accent */
 .nx-headline-gold {
   font-style: italic;
   font-weight: 600;
@@ -195,7 +183,6 @@
   padding-right: 0.06em;
 }
 
-/* Lede */
 .nx-lede {
   width: calc(460 * var(--u));
   max-width: 100%;
@@ -240,7 +227,6 @@
   white-space: nowrap;
 }
 
-/* Primary — solid white, navy text */
 .nx-cta-primary {
   background: #ffffff;
   border: 1px solid #ffffff;
@@ -254,7 +240,6 @@
   box-shadow: 0 calc(10 * var(--u)) calc(26 * var(--u)) rgba(0, 0, 0, 0.25);
 }
 
-/* Ghost (Student Portal link) — transparent, white border + text */
 .nx-cta-ghost {
   background: transparent;
   border: 1.5px solid rgba(255, 255, 255, 0.85);
@@ -270,13 +255,12 @@
   transform: translateY(calc(-1.5 * var(--u)));
 }
 
-/* Keyboard focus */
 .nx-cta:focus-visible {
   outline: 3px solid rgba(255, 233, 168, 0.8);
   outline-offset: 3px;
 }
 
-/* ── Stats bar (bottom-left, just above the wave) ── */
+/* ── Stats bar ── */
 .nx-stats-bar {
   position: absolute;
   left: calc(46 * var(--u));
@@ -359,7 +343,6 @@
     max-width: calc(100% - 2 * 46 * var(--u));
   }
 
-  /* stats bar joins the normal flow under the buttons */
   .nx-stats-bar {
     position: relative;
     left: auto;
@@ -391,7 +374,7 @@
 }
 
 /* ══════════════════════════════════════════════════════════════
-   Mobile ≤ 768px — RESPONSIVE TEXT
+   Mobile ≤ 768px
    ══════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
   .nx-hero {
@@ -403,6 +386,9 @@
     min-height: 580px;
     min-height: 100svh;
     padding: clamp(88px, 14vh, 120px) 20px clamp(64px, 11vh, 96px);
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .nx-bg {
@@ -447,7 +433,6 @@
     width: 100%;
   }
 
-  /* Eyebrow */
   .nx-eyebrow {
     position: relative !important;
     z-index: 2;
@@ -468,7 +453,6 @@
     overflow-wrap: anywhere;
   }
 
-  /* Headline */
   .nx-headline-mask {
     position: relative !important;
     z-index: 2;
@@ -502,7 +486,6 @@
     font-weight: 600 !important;
   }
 
-  /* Lede */
   .nx-lede {
     position: relative !important;
     z-index: 2;
@@ -522,7 +505,6 @@
     overflow-wrap: break-word;
   }
 
-  /* CTA group */
   .nx-cta-group {
     position: relative !important;
     z-index: 2;
@@ -563,7 +545,6 @@
   .nx-cta-primary span { color: #0b2a5b !important; }
   .nx-cta-ghost span { color: #ffffff !important; font-weight: 500 !important; }
 
-  /* Stats bar */
   .nx-stats-bar {
     position: relative !important;
     left: auto !important;
@@ -602,7 +583,7 @@
   }
 }
 
-/* ── Respect reduced-motion preference ── */
+/* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .nx-cta {
     transition-duration: 0.01ms;

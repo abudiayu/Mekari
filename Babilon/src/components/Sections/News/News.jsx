@@ -1,11 +1,12 @@
 import React, { useMemo, useState } from "react";
-import "./News.css";
+import styles from "./News.module.css";
 
 import kiotImg from "../../../assets/BlogImages/kiot.png";
 import libraryImg from "../../../assets/BlogImages/wollo-library.png";
 import titaImg from "../../../assets/BlogImages/wollo-tita.png";
 
-/* Replace the sample content below with your real data / API response. */
+const cx = (...classes) => classes.filter(Boolean).join(" ");
+
 const NEWS = [
   {
     id: 1,
@@ -84,7 +85,7 @@ const formatDate = (iso) =>
 function ArrowIcon() {
   return (
     <svg
-      className="news__arrow"
+      className={styles["news__arrow"]}
       width="16"
       height="16"
       viewBox="0 0 16 16"
@@ -104,11 +105,11 @@ function ArrowIcon() {
 
 function Meta({ item }) {
   return (
-    <p className="news__meta">
-      <span className="news__university">{item.university}</span>
-      <span className="news__meta-sep" aria-hidden="true" />
+    <p className={styles["news__meta"]}>
+      <span className={styles["news__university"]}>{item.university}</span>
+      <span className={styles["news__meta-sep"]} aria-hidden="true" />
       <time dateTime={item.date}>{formatDate(item.date)}</time>
-      <span className="news__meta-sep" aria-hidden="true" />
+      <span className={styles["news__meta-sep"]} aria-hidden="true" />
       <span>{item.readTime} min read</span>
     </p>
   );
@@ -125,27 +126,27 @@ function News() {
   const [featured, ...rest] = items;
 
   return (
-    <section className="news" aria-labelledby="news-heading">
-      <div className="news__container">
-        <header className="news__header">
-          <div className="news__heading-group">
-            <h2 id="news-heading" className="news__title">
+    <section className={styles["news"]} aria-labelledby="news-heading">
+      <div className={styles["news__container"]}>
+        <header className={styles["news__header"]}>
+          <div className={styles["news__heading-group"]}>
+            <h2 id="news-heading" className={styles["news__title"]}>
               Latest from the universities
             </h2>
-            <p className="news__subtitle">
+            <p className={styles["news__subtitle"]}>
               Admissions, research and campus updates from higher education
               institutions across the Wollo region.
             </p>
           </div>
 
-          <div className="news__filters" role="tablist" aria-label="News categories">
+          <div className={styles["news__filters"]} role="tablist" aria-label="News categories">
             {categories.map((cat) => (
               <button
                 key={cat}
                 type="button"
                 role="tab"
                 aria-selected={active === cat}
-                className={`news__filter ${active === cat ? "is-active" : ""}`}
+                className={cx(styles["news__filter"], active === cat && styles["is-active"])}
                 onClick={() => setActive(cat)}
               >
                 {cat}
@@ -155,41 +156,46 @@ function News() {
         </header>
 
         {!featured ? (
-          <p className="news__empty">No news in this category yet. Check back soon.</p>
+          <p className={styles["news__empty"]}>No news in this category yet. Check back soon.</p>
         ) : (
-          <div className="news__grid">
-            <article className="news__featured">
-              <a href={featured.href} className="news__featured-link">
+          <div className={styles["news__grid"]}>
+            <article className={styles["news__featured"]}>
+              <a href={featured.href} className={styles["news__featured-link"]}>
                 {featured.image ? (
-                  <div className="news__featured-media">
+                  <div className={styles["news__featured-media"]}>
                     <img src={featured.image} alt="" loading="lazy" />
-                    <span className="news__chip">{featured.category}</span>
+                    <span className={styles["news__chip"]}>{featured.category}</span>
                   </div>
                 ) : (
-                  <span className="news__chip news__chip--inline">{featured.category}</span>
+                  <span className={cx(styles["news__chip"], styles["news__chip--inline"])}>
+                    {featured.category}
+                  </span>
                 )}
-                <h3 className="news__featured-title">{featured.title}</h3>
-                <p className="news__excerpt">{featured.excerpt}</p>
+                <h3 className={styles["news__featured-title"]}>{featured.title}</h3>
+                <p className={styles["news__excerpt"]}>{featured.excerpt}</p>
                 <Meta item={featured} />
               </a>
             </article>
 
-            <div className="news__side">
-              <ul className="news__list">
+            <div className={styles["news__side"]}>
+              <ul className={styles["news__list"]}>
                 {rest.map((item) => (
-                  <li key={item.id} className="news__item">
+                  <li key={item.id} className={styles["news__item"]}>
                     <a
                       href={item.href}
-                      className={`news__item-link ${item.image ? "" : "news__item-link--text"}`}
+                      className={cx(
+                        styles["news__item-link"],
+                        !item.image && styles["news__item-link--text"]
+                      )}
                     >
                       {item.image && (
-                        <div className="news__thumb">
+                        <div className={styles["news__thumb"]}>
                           <img src={item.image} alt="" loading="lazy" />
                         </div>
                       )}
-                      <div className="news__item-body">
-                        <span className="news__category">{item.category}</span>
-                        <h3 className="news__item-title">{item.title}</h3>
+                      <div className={styles["news__item-body"]}>
+                        <span className={styles["news__category"]}>{item.category}</span>
+                        <h3 className={styles["news__item-title"]}>{item.title}</h3>
                         <Meta item={item} />
                       </div>
                     </a>
@@ -197,7 +203,7 @@ function News() {
                 ))}
               </ul>
 
-              <a href="/news" className="news__more">
+              <a href="/news" className={styles["news__more"]}>
                 View more news
                 <ArrowIcon />
               </a>
