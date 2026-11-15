@@ -16,13 +16,21 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --stagger: 72ms;
 
+  /* clear space for your navbar (top) and footer (bottom) */
+  --nav-space: clamp(72px, 8vw, 110px);
+  --footer-space: clamp(72px, 9vw, 140px);
+
   position: relative;
+  z-index: 0;
   width: 100%;
   margin: 0;
+  padding-top: var(--nav-space);
+  padding-bottom: var(--footer-space);
   background: var(--bg);
   color: var(--ink);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  scroll-margin-top: var(--nav-space);
 }
 
 /* beats the global `* { font-family: 'Mazzard H' }` rule in index.css */
@@ -41,11 +49,11 @@
 /* ---------- Grid shell ---------- */
 .hero {
   width: 100%;
-  min-height: clamp(620px, 86vh, 900px);
+  min-height: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr);
   gap: clamp(16px, 2.4vw, 40px);
-  padding: clamp(24px, 4vw, 64px) var(--pad);
+  padding: 0 var(--pad);
 }
 
 .left {
@@ -468,7 +476,7 @@
   .hero {
     grid-template-columns: minmax(0, 1fr);
     min-height: 0;
-    padding: 28px var(--pad) 40px;
+    padding: 0 var(--pad);
   }
 
   .media {
