@@ -16,7 +16,9 @@
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  margin: 0;
+  position: relative;
+  z-index: 1;
+  margin: calc(-1 * clamp(36px, 6vw, 100px)) 0 0;   /* overlap the Share section above */
   overflow: hidden;
   padding: clamp(40px, 6vw, 88px) var(--pad) clamp(24px, 3vw, 40px);
   border-radius: clamp(36px, 6vw, 100px) clamp(36px, 6vw, 100px) 0 0;

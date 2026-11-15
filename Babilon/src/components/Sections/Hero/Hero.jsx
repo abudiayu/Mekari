@@ -32,7 +32,7 @@ export default function Hero() {
 
         <div className={styles['nx-headline-mask']}>
           <h1 className={styles['nx-headline']}>
-            Knowledge, <span className={styles['nx-headline-gold']}>Innovation</span>, <br /> Excellence
+            Knowledge, <span className={styles['nx-headline-gold']} style={{ color: '#1a5fa8' }}>Innovation</span>, <br /> Excellence
           </h1>
         </div>
 
