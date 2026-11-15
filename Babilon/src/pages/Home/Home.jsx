@@ -1,24 +1,24 @@
 import React from 'react'
-import Navebar from '../../components/Navbar/Navbar'
 import Hero from '../../components/Sections/Hero/Hero'
 import Statics from '../../components/Sections/Static/Statics'
-import News from '../../components/Sections/News/News'
+// import Library from '../../components/Sections/Library/Library'
 import Blog from '../../components/Sections/Blog/Blog'
+import News from '../../components/Sections/News/News'
 import Opportunity from '../../components/Sections/Opportunity/Opportunity'
 import Share from '../../components/Sections/share/Share'
 
 function Home() {
   return (
     <>
-    <Navebar/>
-    <Hero/>
-    <Statics/>
-    <Blog/>
-    <News/>
-    <Opportunity/>
-    <Share/>
+      <Hero />
+      <Statics />
+      {/* <Library /> */}
+      <Blog />
+      <News />
+      <Opportunity />
+      <Share />
     </>
   )
 }
 
-export default Home
+export default Home;

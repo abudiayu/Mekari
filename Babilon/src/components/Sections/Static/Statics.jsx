@@ -187,7 +187,7 @@ function Statics() {
             <h2 id="st-title">Our Impact in Numbers</h2>
             <div className={styles['st-rule']} aria-hidden="true"><i /><i /></div>
           </div>
-          <Link className={styles['st-stats-link']} to="/statistics">View statistics ↗</Link>
+          <Link className={styles['st-stats-link']} to="/staticsdetail">View statistics ↗</Link>
         </header>
 
         {/* ── Triptych ── */}
