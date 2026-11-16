@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, Router } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home/Home';
 import StaticsDetail from './components/DetailSection/StaticsDetail/StaticsDetail';
@@ -7,6 +7,7 @@ import NotFound from "./components/NotFound/NotFound";
 import Elibrary from './components/Elibrary/Elibrary';
 import CampusLife from './components/DetailSection/Campus-life/CampusLife';
 import StudentLife from './components/DetailSection/StudentLife/StudentLife';
+import Almuni from './components/DetailSection/Almuni/Almuni';
 
 
 // function NotFound() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/e-learning" element={<Elibrary/>}/>
           <Route path="/campus-life" element={<CampusLife/>}/>
           <Route path="/studentLife" element={<StudentLife/>} />
+          <Route path="/alumni" element={<Almuni/>} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
