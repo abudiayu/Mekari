@@ -8,6 +8,7 @@ import Elibrary from './components/Elibrary/Elibrary';
 import CampusLife from './components/DetailSection/Campus-life/CampusLife';
 import StudentLife from './components/DetailSection/StudentLife/StudentLife';
 import Almuni from './components/DetailSection/Almuni/Almuni';
+import Departments from './components/Departments/Departments';
 
 
 // function NotFound() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/campus-life" element={<CampusLife/>}/>
           <Route path="/studentLife" element={<StudentLife/>} />
           <Route path="/alumni" element={<Almuni/>} />
+          <Route path="/departments" element={<Departments/>} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
