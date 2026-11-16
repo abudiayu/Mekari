@@ -279,7 +279,7 @@ function CampusLife() {
             ))}
           </div>
           <div className={styles.heroActions}>
-            <a href="#life" className={styles.btnPrimary}>Explore student life</a>
+            <a href="/studentLife" className={styles.btnPrimary}>Explore student life</a>
             <a href="#events" className={styles.btnGlass}>See events</a>
           </div>
         </div>
