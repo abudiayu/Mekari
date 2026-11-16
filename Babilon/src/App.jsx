@@ -5,6 +5,7 @@ import StaticsDetail from './components/DetailSection/StaticsDetail/StaticsDetai
 import Library from './components/Sections/Library/Library';
 import NotFound from "./components/NotFound/NotFound";
 import Elibrary from './components/Elibrary/Elibrary';
+import CampusLife from './components/DetailSection/Campus-life/CampusLife';
 
 
 // function NotFound() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/staticsdetail" element={<StaticsDetail />} />
           <Route path="/library" element={<Library/>}/>
           <Route path="/e-learning" element={<Elibrary/>}/>
+          <Route path="/campus-life" element={<CampusLife/>}/>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
