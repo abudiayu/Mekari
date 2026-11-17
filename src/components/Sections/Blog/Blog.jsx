@@ -232,7 +232,7 @@ function Blog() {
           <span className={styles['bg-card-tag']}>{slide.card.tag}</span>
           <h3>{slide.card.title}</h3>
           <p>{slide.card.text}</p>
-          <Link className={styles['bg-card-link']} to={slide.card.to}>
+          <Link className={styles['bg-card-link']} to="/gallary">
             View Gallery <UpRight />
           </Link>
         </div>
