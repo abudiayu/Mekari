@@ -37,7 +37,7 @@ const NAV_ITEMS = [
   {
     label: 'Latest',
     links: [
-      { label: 'News', to: '/#' },
+      { label: 'News', to: '/news' },
       { label: 'Events', to: '/#' },
       { label: 'Announcements', to: '/#' },
     ],

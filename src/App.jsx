@@ -11,6 +11,7 @@ import Almuni from './components/DetailSection/Almuni/Almuni';
 import Departments from './components/Departments/Departments';
 import Gallary from './components/DetailSection/Gallary/Gallary';
 import Auth from './pages/Auth/Auth';
+import News from './pages/News/News';
 
 
 // function NotFound() {
@@ -34,6 +35,7 @@ function App() {
           <Route path="/departments" element={<Departments/>} />
           <Route path='/gallary' element = {<Gallary/>}/>
           <Route path= "/auth"  element = {<Auth/>}/>
+          <Route path="/news" element= {<News/>}/>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
