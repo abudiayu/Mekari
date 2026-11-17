@@ -94,7 +94,7 @@ const NAV_ITEMS = [
   },
 ];
 
-const LOGIN_PATH = '/login';
+const LOGIN_PATH = '/auth';
 
 function Navbar() {
   const navigate = useNavigate();
