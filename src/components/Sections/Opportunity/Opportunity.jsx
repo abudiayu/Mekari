@@ -2,12 +2,20 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Opportunity.module.css';
 
-/* Same images as the Blog slider (adjust ../../../ if your folder is nested differently) */
-import kiotImg from '../../../assets/BlogImages/kiot.png';
-import libraryImg from '../../../assets/BlogImages/wollo-library.png';
-import titaImg from '../../../assets/BlogImages/wollo-tita.png';
+/* Image links (no local imports needed).
+   Replace each URL with a Wollo University photo address:
+   open the photo in your browser, right-click it, choose "Copy image address",
+   then paste it between the quotes below. */
+const kiotImg = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRT4lZ-ycFXW2Vnh6MsFCFYoxMh7KPBS-sAQMT7TpuPUNVF-MvGSTvi_U&s=10';     // KIoT, Kombolcha
+const libraryImg = 'https://static.wixstatic.com/media/118341_b124faf4e2b8400a8ebfca993a20ad44~mv2.jpg/v1/fill/w_1000,h_666,al_c,q_85,usm_0.66_1.00_0.01/118341_b124faf4e2b8400a8ebfca993a20ad44~mv2.jpg';  // Library / Dessie campus
+const titaImg = 'https://i.pinimg.com/1200x/34/9a/f2/349af23efa5223d1c9c51ea0f4cfb705.jpg';     // Tita campus
+const titaImgss = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQU0C610iOLKA26Y-iGorzpSnjoB6oH7wh_ps1n_YJcHfdGbuFbxLg_Q4&s=10'; 
+const titaImgs = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOjImlQp2elV2t7HqseUvUw82PTpJac8htfylL_e71qLIDMwDxf7saZ2Y&s=10'; 
+const sport = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQioCZpGDvi79E6QkdtXHNt1IKszT2XYWCDBLzmrp8oTZ4U74VR0hxhcpc&s=10";
+const muday = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk8nnxdHqhlQMpY8_0zbcZCfc8Bn0qpR1Puf0yXwy9JLOQoVt_Y96Q9g&s=10";
 
-const IMAGES = [kiotImg, libraryImg, titaImg];
+
+const IMAGES = [kiotImg, libraryImg, titaImg,titaImgs,titaImgss,sport,muday];
 
 /* One "half" of the strip must be wider than the screen, so the 3 photos are
    repeated 3 times; the half is then duplicated once for the seamless loop. */
