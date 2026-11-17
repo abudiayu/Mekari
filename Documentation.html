@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Wollo-Info Hub – System Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+Ethiopic:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#f5f8f6;--sf:#fff;--tx:#14211c;--mu:#5b6b64;--bd:#dbe4df;--ac:#0b6b4d;--as:#d9efe6;--cb:#eef3f0}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.65 "IBM Plex Sans","Noto Sans Ethiopic",system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+code,pre{font-family:"IBM Plex Mono",monospace;font-size:.84rem}
+aside{position:fixed;inset:0 auto 0 0;width:260px;overflow-y:auto;background:var(--sf);border-right:1px solid var(--bd);padding:1.25rem .9rem}
+aside b{display:block;font:700 1.1rem "Source Serif 4",serif;color:var(--ac);margin:0 .5rem .8rem}
+aside a{display:block;padding:.3rem .5rem;border-radius:5px;color:var(--mu);text-decoration:none;font-size:.9rem}
+aside a:hover{background:var(--bg);color:var(--tx)}aside a.on{background:var(--as);color:var(--ac);font-weight:600}
+main{margin-left:260px;padding:2rem 2.25rem 4rem;max-width:960px}
+section{margin-bottom:2.8rem;scroll-margin-top:1rem}
+h1{font:700 2.1rem "Source Serif 4",serif;margin:0 0 .3rem}
+h2{font:700 1.65rem/1.25 "Source Serif 4",serif;margin:0 0 1rem;padding-bottom:.4rem;border-bottom:2px solid var(--bd)}
+h3{font:600 1.1rem "Source Serif 4",serif;margin:1.4rem 0 .5rem}
+p,ul,ol{margin:.55rem 0}code{background:var(--cb);padding:.1rem .3rem;border-radius:4px}
+.lead{color:var(--mu);margin-top:0}
+.tw{overflow-x:auto;margin:.9rem 0}table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{border:1px solid var(--bd);padding:.4rem .6rem;text-align:left;vertical-align:top}th{background:var(--cb)}
+td.y{color:var(--ac);font-weight:600}td.n{color:var(--mu)}
+pre{background:var(--cb);border:1px solid var(--bd);border-radius:8px;padding:1rem;overflow-x:auto;margin:.9rem 0}pre code{background:none;padding:0}
+.co{border-left:4px solid;padding:.75rem 1rem;border-radius:0 6px 6px 0;margin:1rem 0}.co b{display:block}
+.warn{background:#fff4dc;border-color:#e0a100}.note{background:#e8f1fb;border-color:#3b82f6}.tip{background:#e3f5ea;border-color:#1f9d63}
+.flow{display:flex;flex-wrap:wrap;gap:.4rem;align-items:center;margin:.9rem 0}
+.flow span{background:var(--sf);border:1px solid var(--ac);border-radius:6px;padding:.3rem .65rem;font-size:.88rem}.flow i{color:var(--mu);font-style:normal}
+.layers{margin:1rem 0;display:grid;gap:.5rem}
+.layer{border:1px solid var(--bd);background:var(--sf);border-radius:8px;padding:.7rem .9rem}
+.layer b{display:block;font-size:.95rem}.layer small{color:var(--mu)}
+.layer.u{border-color:#9b8bd6;background:#f1eefb}.layer.f{border-color:var(--ac);background:#e8f5ef}.layer.s{border-color:#b8b5a8;background:#f3f1ea}
+.am{font-family:"Noto Sans Ethiopic",sans-serif}
+.tag{display:inline-block;border-radius:4px;padding:0 .4rem;font-size:.78rem;font-weight:600}
+.tag.ex{background:var(--as);color:var(--ac)}.tag.nw{background:#fff4dc;color:#8a5a00}
+@media(max-width:900px){aside{position:static;width:auto;border:0;border-bottom:1px solid var(--bd)}main{margin:0;padding:1.25rem}}
+@media print{aside{display:none}main{margin:0;max-width:none;padding:0}}
+</style>
+</head>
+<body>
+<aside><b>Wollo-Info Hub</b><nav id="toc">
+<a href="#goal">Goal</a><a href="#accounts">Account types</a><a href="#architecture">System architecture</a><a href="#structure">Folder structure</a><a href="#journey">Student journey</a><a href="#student">Student dashboard and library</a><a href="#depthead">Department head page</a><a href="#unions">Union and club pages</a><a href="#admin">Admin panel</a><a href="#chatbot">AI chatbot</a><a href="#database">Database plan</a><a href="#rls">Access rules (RLS)</a><a href="#api">API and functions</a><a href="#security">Security rules</a><a href="#deploy">Deployment</a><a href="#roadmap">Build roadmap</a><a href="#decisions">Open decisions</a><a href="#working">Working notes</a>
+</nav></aside>
+<main>
+<h1>Wollo-Info Hub</h1>
+<p class="lead">System documentation: what we are building, who can do what, and how the parts fit together. Frontend: React + Vite (JSX). Backend: Supabase (Auth, Postgres with RLS, Storage, pgvector) plus an Express API on Render. An AI chatbot reads the site's own data to help students.</p>
+
+<section id="goal"><h2>Goal</h2>
+<p>Give students trustworthy information about Wollo University and make university life easier: departments, courses, graduates, opportunities, student unions and clubs, motivation and study documents. Detailed information is shown only after login. An AI chatbot, connected to the same data as the site, tells students what they can do and how to do it, step by step, in Amharic or English.</p>
+<ul>
+<li><strong>Students</strong> sign in to read detailed department information, follow unions and keep a personal library.</li>
+<li><strong>Department heads</strong> manage the information of their own department.</li>
+<li><strong>Union and club accounts</strong> post news and opportunities on their own page.</li>
+<li><strong>Admin</strong> controls everything.</li>
+</ul></section>
+
+<section id="accounts"><h2>Account types</h2>
+<p>There are four kinds of account. Staff and heads are stored in <code>staff_profiles</code> with a <code>role</code> of <code>admin</code>, <code>head</code>, <code>staff</code> or <code>union</code>. Students are stored in <code>students</code>. Every account also has a row in <code>public.users</code>, linked to Supabase Auth.</p>
+<div class="tw"><table><thead><tr><th>Account</th><th>Created by</th><th>Linked to</th><th>Main job</th></tr></thead><tbody>
+<tr><td>Student</td><td>Self-registration (email or Google)</td><td>One department, or "fresh"</td><td>Read detail pages, personal library, use the chatbot</td></tr>
+<tr><td>Department head</td><td>Admin</td><td>One department</td><td>Add and edit information about their department</td></tr>
+<tr><td>Union or club account</td><td>Admin</td><td>One union</td><td>Post news and opportunities on the union page</td></tr>
+<tr><td>Admin</td><td>Another admin or setup script</td><td>None</td><td>Control the whole site</td></tr>
+</tbody></table></div>
+<h3>Permissions</h3>
+<div class="tw"><table><thead><tr><th>Action</th><th>Visitor</th><th>Student</th><th>Union</th><th>Dept head</th><th>Admin</th></tr></thead><tbody>
+<tr><td>See public home, department list, union pages, opportunity titles</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td></tr>
+<tr><td>See detailed department information</td><td class="n">Login first</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td></tr>
+<tr><td>Use personal library</td><td class="n">No</td><td class="y">Own only</td><td class="n">No</td><td class="n">No</td><td class="n">No</td></tr>
+<tr><td>Use the AI chatbot</td><td class="n">Login first</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td><td class="y">Yes</td></tr>
+<tr><td>Edit department profile, courses, prerequisites, graduates</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Own department</td><td class="y">All</td></tr>
+<tr><td>See students interested in a department</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Own department</td><td class="y">All</td></tr>
+<tr><td>Post on a union page</td><td class="n">No</td><td class="n">No</td><td class="y">Own union</td><td class="n">No</td><td class="y">All unions</td></tr>
+<tr><td>Add opportunities and motivation</td><td class="n">No</td><td class="n">No</td><td class="y">Own union (as union posts)</td><td class="y">Own department</td><td class="y">All</td></tr>
+<tr><td>Add library documents and help guides</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Own department</td><td class="y">All</td></tr>
+<tr><td>Add or remove department heads and union accounts</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Yes</td></tr>
+<tr><td>Create, edit or remove departments, programs and unions</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Yes</td></tr>
+<tr><td>See all users and reset accounts</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="n">No</td><td class="y">Yes</td></tr>
+</tbody></table></div></section>
+
+<section id="architecture"><h2>System architecture</h2>
+<div class="layers">
+<div class="layer u"><b>Users</b><small>Visitor, student, department head, union account, admin</small></div>
+<div class="layer f"><b>React + Vite frontend (Vercel)</b><small>Public pages, login gate, student dashboard, head page, union dashboard, admin console, chat window. Languages: en, am, om.</small></div>
+<div class="layer f"><b>Express API (Render) and chat service (edge function)</b><small>The API handles admin actions and protected writes. The chat service searches the data and calls the AI model.</small></div>
+<div class="layer s"><b>Supabase project</b><small>Auth (email, Google) · Postgres with RLS and RPC functions · Storage (files, photos) · pgvector (chat knowledge)</small></div>
+<div class="layer s"><b>AI model (external API)</b><small>Answers only from the content the chat service gives it. The API key lives on the server, never in the frontend.</small></div>
+</div>
+<h3>How a request moves</h3>
+<ul>
+<li>Login and Google sign-in go from the frontend straight to Supabase Auth.</li>
+<li>Public reads and student reads go to Supabase with the user's token, so RLS decides what comes back.</li>
+<li>Admin actions (create a head, remove a union account) go through the Express API, which checks the role first.</li>
+<li>Chat questions go to the chat service with the user's token, so the chatbot can only read what that user may read.</li>
+</ul></section>
+
+<section id="structure"><h2>Folder structure</h2>
+<p>Taken from your project. Items marked <em>new</em> are planned.</p>
+<pre><code>wollo-info-hub/                 # frontend (React + Vite, JSX)
+├── public/
+├── src/
+│   ├── api/                    # fetch helpers (client.js)
+│   ├── assets/
+│   ├── components/             # shared UI, new: ChatWidget
+│   ├── context/                # AuthContext (Supabase auth, Google sign-in)
+│   ├── i18n/                   # en, am, om
+│   ├── pages/
+│   │   ├── Admin/              # admin console
+│   │   ├── Auth/               # login, register, Google
+│   │   ├── departments/&lt;Name&gt;/ # public department pages
+│   │   ├── student/            # new: Dashboard, Library, DepartmentInfo
+│   │   ├── depthead/           # new: Profile, Courses, Graduates, Interested
+│   │   └── unions/             # new: UnionPage, UnionDashboard
+├── .env  index.html  package.json  vite.config.js  README.md
+
+wollo-info-backend/             # Supabase backend
+├── supabase/migrations/        # 0001–0009 (core tables, triggers, RLS, RPC, storage)
+│   └── new: unions, courses, graduates, library, help guides, knowledge_chunks
+├── supabase/functions/         # new: chat (edge function), embed-content
+├── src/server.js               # Express API (Render)
+├── .env
+└── package.json</code></pre></section>
+
+<section id="journey"><h2>Student journey</h2>
+<div class="flow"><span>Open site</span><i>→</i><span>Browse public pages</span><i>→</i><span>Click detail</span><i>→</i><span>Login or register</span><i>→</i><span>Student dashboard</span></div>
+<ol>
+<li>A visitor sees the public pages. Clicking anything detailed redirects to <code>/auth</code> and returns to the same page after login.</li>
+<li>At registration the student says whether they are <strong>fresh</strong> (not yet in a department) or already in a department.</li>
+<li>A current student gets their department's detailed page. A fresh student can mark one or more departments as "interested", which department heads can see.</li>
+<li>The dashboard offers an optional personal library. A student can skip it and create it later.</li>
+<li>The chat window is available on every logged-in page for questions such as "how do I fix my registration?".</li>
+</ol></section>
+
+<section id="student"><h2>Student dashboard and library</h2>
+<h3>Dashboard</h3>
+<ul>
+<li>My department: duration, courses, prerequisites, graduates, opportunities.</li>
+<li>Interested departments (for fresh students).</li>
+<li>Latest opportunities, motivation posts and union news.</li>
+<li>Chat window.</li>
+</ul>
+<h3>Personal library</h3>
+<ul>
+<li>Created on demand with "Create my library". Fresh students can leave it out.</li>
+<li>Only the owner can see it. RLS enforces <code>owner_id = auth.uid()</code> on every row.</li>
+<li>A student can save official documents and upload their own files to Supabase Storage.</li>
+<li>Allowed file types and size limits follow the existing media rules (blocked extensions, 20 MB per file).</li>
+</ul></section>
+
+<section id="depthead"><h2>Department head page</h2>
+<p>One page per department head, limited to that head's department. The admin creates the head account and can remove it.</p>
+<div class="tw"><table><thead><tr><th>Section</th><th>What the head manages</th></tr></thead><tbody>
+<tr><td>Department profile</td><td>Description, duration in years, degree type</td></tr>
+<tr><td>Course list</td><td>Courses by year and semester, credit hours</td></tr>
+<tr><td>Prerequisites</td><td>Entry requirements for the department</td></tr>
+<tr><td>Graduates</td><td>Graduates by year, name, current work (shown to students)</td></tr>
+<tr><td>Interested students</td><td>Read-only list of students who chose this department, from the <code>department_students</code> view</td></tr>
+<tr><td>Opportunities and motivation</td><td>Create, edit, publish for this department</td></tr>
+<tr><td>Library documents and help guides</td><td>Upload documents and write procedures for this department's students</td></tr>
+</tbody></table></div></section>
+
+<section id="unions"><h2>Union and club pages</h2>
+<p>Each student union or club has its own public page and its own account. The union account posts news and opportunities that students see on that page, on the dashboard and in the chatbot.</p>
+<div class="tw"><table><thead><tr><th>Union</th><th>Page</th><th>Typical posts</th></tr></thead><tbody>
+<tr><td>Media Art union</td><td><code>/unions/media-art</code></td><td>Exhibitions, workshops, calls for work</td></tr>
+<tr><td>Student union</td><td><code>/unions/student-union</code></td><td>News, announcements, uploads</td></tr>
+<tr><td>Sport union</td><td><code>/unions/sport</code></td><td>Matches, tryouts, events</td></tr>
+<tr><td>AppFactory</td><td><code>/unions/appfactory</code></td><td>Projects, hackathons, openings</td></tr>
+<tr><td>Tech Club union</td><td><code>/unions/tech-club</code></td><td>Talks, trainings, competitions</td></tr>
+</tbody></table></div>
+<ul>
+<li>The admin can add a new union, create its account, and remove either.</li>
+<li>A union account can write only to its own union's posts. RLS checks <code>union_id</code> on every write.</li>
+<li>The admin can also post opportunities directly and create a page for each one.</li>
+</ul></section>
+
+<section id="admin"><h2>Admin panel</h2>
+<ul>
+<li><strong>Users:</strong> list of students, staff, heads, union accounts and admins with name, id, email, role and department or union.</li>
+<li><strong>Department heads:</strong> add, assign a department, change, deactivate or remove.</li>
+<li><strong>Union accounts:</strong> add a union, create its account, deactivate or remove.</li>
+<li><strong>Departments and programs:</strong> add, edit and delete dynamically under faculties such as Social Science and Informatics. The nav bar dropdowns and the Departments page read from the database.</li>
+<li><strong>Opportunities and motivation:</strong> add, edit, publish, and create a page for each opportunity.</li>
+<li><strong>Password reset:</strong> through Supabase Auth admin functions, never by showing a password.</li>
+<li><strong>Chatbot:</strong> see unanswered questions and turn them into guides.</li>
+</ul>
+<div class="co warn"><b>Passwords are not viewable</b>Supabase Auth stores passwords as hashes. They cannot be read back, and showing them would be unsafe even for an admin. The admin sees names and emails and can send a reset instead.</div></section>
+
+<section id="chatbot"><h2>AI chatbot</h2>
+<p>The chatbot is connected to the site's own data. It tells students what they can do and how, using content published by the admin, department heads and unions. It answers in the language the student writes in (<span class="am">አማርኛ</span> or English).</p>
+<h3>How it works</h3>
+<ol>
+<li><strong>Knowledge.</strong> Departments, courses, prerequisites, opportunities, motivation, union posts, documents and help guides are split into chunks and stored in <code>knowledge_chunks</code> with an embedding. Use a multilingual embedding model so Amharic works.</li>
+<li><strong>Search.</strong> The chat service embeds the question and finds the closest chunks with pgvector. For personal questions it also calls database functions (for example "opportunities for my department").</li>
+<li><strong>Answer.</strong> The AI model receives the question and the found content, and answers only from that content, with the source named.</li>
+<li><strong>No match.</strong> The chatbot says it does not know, offers the guide categories, and logs the question in <code>unanswered_questions</code> so staff can write a guide.</li>
+<li><strong>Freshness.</strong> A trigger or function re-embeds a chunk whenever its source row is created or edited.</li>
+</ol>
+<h3>Rules</h3>
+<ul>
+<li>The chat service uses the student's own token, so RLS limits what it can find. It never returns other students' data.</li>
+<li>The AI API key stays on the server (edge function or Render). It is never in the frontend.</li>
+<li>Rate limit per user. Stay on university topics. Never invent office numbers, deadlines or fees.</li>
+<li>Show the source with each answer, for example "from the Computer Science department page".</li>
+</ul>
+<h3>Guide format (the structured part of the knowledge)</h3>
+<pre><code class="language-json">{
+  "category": "registration",
+  "title_en": "Fix a registration problem",
+  "title_am": "የምዝገባ ችግር",
+  "keywords": ["registration", "register", "ምዝገባ"],
+  "department_id": null,
+  "steps": [
+    { "no": 1, "text_en": "Go to the Registrar office.", "text_am": "ወደ ሬጅስትራር ቢሮ ይሂዱ።", "office": "Registrar", "room": "123", "photo": "registrar.jpg" },
+    { "no": 2, "text_en": "Then visit the side office.", "text_am": "ከዚያ ወደ ጎን ቢሮ ይሂዱ።", "office": "Side office", "room": "Not set", "photo": null },
+    { "no": 3, "text_en": "Finally visit your department head.", "text_am": "በመጨረሻ የትምህርት ክፍል ኃላፊውን ይጎብኙ።", "office": "Department head", "room": "232", "photo": "head.jpg" }
+  ]
+}</code></pre>
+<div class="co tip"><b>Guides are the backbone</b>Even with an AI model, accurate office numbers and photos come from guides written by admins, heads and unions. The model explains and connects them; it does not make them up.</div></section>
+
+<section id="database"><h2>Database plan</h2>
+<p>Postgres on Supabase. Migrations <code>0001</code>–<code>0009</code> already hold the core tables, triggers, RLS, RPC functions and storage. Check the "Status" column against your migration files; <em>Existing</em> means it was planned in the first Supabase schema.</p>
+<div class="tw"><table><thead><tr><th>Table</th><th>Main columns</th><th>Status</th></tr></thead><tbody>
+<tr><td>users</td><td>id (links to auth.users), full_name, email, avatar</td><td><span class="tag ex">Existing</span></td></tr>
+<tr><td>staff_profiles</td><td>user_id, role (admin | head | staff | union), department_id, union_id, is_active</td><td><span class="tag ex">Existing</span> add union role and union_id</td></tr>
+<tr><td>students</td><td>user_id, department_id (null = fresh)</td><td><span class="tag ex">Existing</span></td></tr>
+<tr><td>departments</td><td>id, slug, name, faculty, description, duration_years, degree_type</td><td><span class="tag ex">Existing</span> add fields if missing</td></tr>
+<tr><td>opportunities</td><td>title, body, department_id, union_id, created_by, published</td><td><span class="tag ex">Existing</span> add union_id</td></tr>
+<tr><td>motivations</td><td>title, body, department_id, created_by, published</td><td><span class="tag ex">Existing</span></td></tr>
+<tr><td>department_students (view)</td><td>students joined with department and user</td><td><span class="tag ex">Existing</span></td></tr>
+<tr><td>audit_logs</td><td>actor_id, action, table, row_id, created_at</td><td><span class="tag ex">Existing</span></td></tr>
+<tr><td>unions</td><td>id, slug, name, description, logo</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>union_posts</td><td>union_id, title, body, type (news | opportunity), image, created_by, published</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>department_requirements</td><td>department_id, text_en, text_am</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>courses</td><td>department_id, year, semester, code, title, credit_hours</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>graduates</td><td>department_id, name, graduation_year, current_work, photo</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>department_interest</td><td>student_id, department_id, created_at</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>libraries and library_items</td><td>owner_id; library_id, title, file or document_id</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>documents</td><td>title, file path, department_id (null = all), uploaded_by</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>help_categories, help_guides, help_guide_steps</td><td>categories, guides with en/am titles and keywords, ordered steps with office, room, photo</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>knowledge_chunks</td><td>source_table, source_id, text, language, embedding (vector)</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>chat_messages</td><td>user_id, role, text, created_at</td><td><span class="tag nw">New</span></td></tr>
+<tr><td>unanswered_questions</td><td>user_id, text, language, created_at, resolved_guide_id</td><td><span class="tag nw">New</span></td></tr>
+</tbody></table></div>
+<p>Use UTF-8 everywhere so Amharic text is stored correctly. Enable the <code>vector</code> extension for <code>knowledge_chunks</code>.</p></section>
+
+<section id="rls"><h2>Access rules (RLS)</h2>
+<p>Row level security is the main security layer. Every table has RLS on. The rules below describe intent; write them as policies in a new migration.</p>
+<div class="tw"><table><thead><tr><th>Table</th><th>Read</th><th>Write</th></tr></thead><tbody>
+<tr><td>departments, unions, published union_posts and opportunities</td><td>Everyone (public fields)</td><td>Admin; head for own department; union account for own union</td></tr>
+<tr><td>department detail, courses, graduates</td><td>Logged-in users</td><td>Admin; head for own department</td></tr>
+<tr><td>department_students and department_interest</td><td>Admin; head for own department; the student for own rows</td><td>The student for own rows</td></tr>
+<tr><td>libraries and library_items</td><td>Owner only</td><td>Owner only</td></tr>
+<tr><td>staff_profiles</td><td>Admin; each person reads own row</td><td>Admin only</td></tr>
+<tr><td>knowledge_chunks</td><td>Chat service, filtered by what the user may read</td><td>Embedding function only</td></tr>
+<tr><td>chat_messages, unanswered_questions</td><td>Owner for own messages; admin and staff for unanswered</td><td>Chat service</td></tr>
+</tbody></table></div>
+<div class="co note"><b>Helper functions</b>Create small SQL functions such as <code>is_admin()</code>, <code>my_department_id()</code> and <code>my_union_id()</code> and use them in the policies, so the rules stay short and readable.</div></section>
+
+<section id="api"><h2>API and functions</h2>
+<p>Most reads and own-row writes go straight to Supabase under RLS. The Express API and edge functions cover what the browser must not do itself.</p>
+<div class="tw"><table><thead><tr><th>Where</th><th>Who</th><th>Purpose</th></tr></thead><tbody>
+<tr><td>Supabase Auth</td><td>Public</td><td>Register (student only), login, Google sign-in, password reset email</td></tr>
+<tr><td>POST /api/admin/heads, DELETE /api/admin/heads/:id</td><td>Admin</td><td>Create or remove a department head (uses the service role key on the server)</td></tr>
+<tr><td>POST /api/admin/unions, DELETE /api/admin/unions/:id</td><td>Admin</td><td>Create or remove a union and its account</td></tr>
+<tr><td>PATCH /api/admin/users/:id</td><td>Admin</td><td>Change role, department, union, active state; trigger a password reset</td></tr>
+<tr><td>Direct table access with RLS</td><td>By role</td><td>Departments, courses, graduates, opportunities, union posts, library, interest</td></tr>
+<tr><td>Edge function <code>chat</code></td><td>Logged in</td><td>Search knowledge, call the AI model, return answer and sources</td></tr>
+<tr><td>Edge function <code>embed-content</code></td><td>System</td><td>Create or refresh <code>knowledge_chunks</code> when content changes</td></tr>
+<tr><td>GET /</td><td>Public</td><td>Health check, so the Render root returns a simple status instead of a not-found error</td></tr>
+</tbody></table></div></section>
+
+<section id="security"><h2>Security rules</h2>
+<ul>
+<li>Check the role on the <strong>server or in RLS</strong> for every protected action. Hiding a button in React is not security.</li>
+<li>Heads and union accounts can only change rows where <code>department_id</code> or <code>union_id</code> matches their own.</li>
+<li>The Supabase <strong>service role key</strong> lives only in the backend environment. Never put it in the frontend or in Git.</li>
+<li>The frontend uses only the public (anon) key and the user's own token.</li>
+<li>Never return password hashes or secrets. Reset instead of reveal.</li>
+<li>Students see only their own library and profile. Student personal data is visible only to the admin and the matching department head.</li>
+<li>Keep every <code>.env</code> out of Git and check it was never committed.</li>
+<li>Rate limit login and the chat function. Validate file types and sizes on upload.</li>
+<li>Keep CORS limited to your Vercel and local origins.</li>
+</ul></section>
+
+<section id="deploy"><h2>Deployment</h2>
+<div class="tw"><table><thead><tr><th>Part</th><th>Where</th><th>Notes</th></tr></thead><tbody>
+<tr><td>Frontend</td><td>Vercel (wollo-info-hub.vercel.app)</td><td><code>VITE_API_URL</code> points to the Render URL; the Supabase URL and anon key are set as environment variables</td></tr>
+<tr><td>Express API</td><td>Render</td><td>Service role key and AI key stored as Render environment variables; add a <code>GET /</code> route</td></tr>
+<tr><td>Database, Auth, Storage, edge functions</td><td>Supabase</td><td>Apply migrations in order; set Google provider redirect URLs for both local and Vercel</td></tr>
+<tr><td>Local development</td><td>localhost (frontend on 5173)</td><td>Google sign-in must return to whichever site (local or deployed) started it</td></tr>
+</tbody></table></div></section>
+
+<section id="roadmap"><h2>Build roadmap</h2>
+<p>Small phases, each one working before the next starts.</p>
+<ol>
+<li><strong>Roles and departments:</strong> add the <code>union</code> role, the <code>unions</code> table, helper functions and RLS; admin adds and removes heads and union accounts; admin adds and deletes departments dynamically.</li>
+<li><strong>Login gate:</strong> redirect to login for detail pages and return after login; student registration with department or "fresh"; fix the registration 404 in <code>Auth.jsx</code>.</li>
+<li><strong>Department head page:</strong> profile, courses, requirements, graduates, interested students, opportunities and motivation.</li>
+<li><strong>Union pages:</strong> public union pages and the union dashboard for posting.</li>
+<li><strong>Content on the public site:</strong> make new motivation and opportunities show on the public pages (Supabase version of the fix).</li>
+<li><strong>Documents and student library.</strong></li>
+<li><strong>AI chatbot:</strong> pgvector, embedding on publish, chat function, guides with steps and photos, unanswered-question log.</li>
+<li><strong>Admin polish and security review:</strong> RLS tests, rate limits, deployment checks.</li>
+</ol></section>
+
+<section id="decisions"><h2>Open decisions</h2>
+<ul>
+<li>Should union posts show publicly right away, or wait for admin approval?</li>
+<li>Can a student follow several unions? Can one union have several accounts?</li>
+<li>Does a student belong to one department, or can they be interested in several?</li>
+<li>Should students register freely, or with a university ID number that we verify?</li>
+<li>Which AI model and embedding model will the chatbot use, and what monthly budget is acceptable?</li>
+<li>Which office names and numbers should the first guides cover (registration, dormitory, library, department change)?</li>
+</ul></section>
+
+<section id="working"><h2>Working notes</h2>
+<p>Notes to keep the project consistent when building with an assistant or with Kiro.</p>
+<ul>
+<li>The backend is Supabase, not MySQL. Any fix that mentions MAMP or the old MySQL database is out of date and must be redone for Supabase.</li>
+<li>Frontend files are JSX (React + Vite). When asked for code, give complete files (full JSX and CSS), not snippets.</li>
+<li>When a message asks for "the prompt", deliver only the prompt text for the build tool, not the generated code.</li>
+<li>Keep department-scoped and union-scoped permissions in RLS first, then mirror them in the UI.</li>
+<li>Current known issues: student registration returns a 404 from <code>Auth.jsx</code>; new motivations do not appear on the public Motivation page; the Render backend root returns <code>Route GET / not found</code>.</li>
+</ul></section>
+</main>
+<script>
+(function(){var l=[].slice.call(document.querySelectorAll('#toc a')),s=l.map(function(a){return document.querySelector(a.getAttribute('href'))});
+function f(){var y=scrollY+80,c=0;s.forEach(function(e,i){if(e.offsetTop<=y)c=i});l.forEach(function(a,i){a.classList.toggle('on',i===c)})}
+addEventListener('scroll',f,{passive:true});f()})();
+</script>
+</body>
+</html>
