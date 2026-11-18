@@ -15,6 +15,7 @@ import Auth from './pages/Auth/Auth';
 import News from './pages/News/News';
 import Events from './ListNavebars/Events/Events';
 import Loding from './components/Loding/Loding';
+import About from './pages/About/About';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -48,6 +49,7 @@ function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/news" element={<News />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/about" element={<About />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

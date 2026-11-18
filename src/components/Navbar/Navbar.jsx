@@ -37,15 +37,15 @@ const NAV_ITEMS = [
   {
     label: 'Latest',
     links: [
-      { label: 'News', to: '/news' },
-      { label: 'Events', to: '/events' },
-      { label: 'Announcements', to: '/#' },
+      { label: 'News & Events', to: '/news' },
+      { label: 'Announcements', to: '/events' },
+      // { label: 'Announcements', to: '/#' },
     ],
   },
   {
     label: 'About',
     links: [
-      { label: 'About the University', to: '/#' },
+      { label: 'About the University', to: '/about' },
       { label: 'Vision & Mission', to: '/#' },
       { label: 'Leadership', to: '/#' },
       { label: 'Contact Us', to: '/#' },

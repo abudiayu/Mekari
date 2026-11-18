@@ -36,13 +36,18 @@ export default function Hero() {
           </h1>
         </div>
 
-        <p className={styles['nx-lede']}>{t('hero.lede')}</p>
+        <p className={styles['nx-lede']}>{t('Ai modeled Platform')}</p>
 
         <div className={styles['nx-cta-group']}>
-          <Link className={`${styles['nx-cta']} ${styles['nx-cta-primary']}`} to="/departments">
-            <span>{t('hero.cta')}</span>
+          <Link
+            className={`${styles['nx-cta']} ${styles['nx-cta-primary']}`}
+            to="https://wollo-info-hub.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>{t('Ask KIKI AI')}</span>
           </Link>
-          <Link className={`${styles['nx-cta']} ${styles['nx-cta-ghost']}`} to="/login">
+          <Link className={`${styles['nx-cta']} ${styles['nx-cta-ghost']}`} to="/auth">
             <span>Student Portal &rarr;</span>
           </Link>
         </div>
