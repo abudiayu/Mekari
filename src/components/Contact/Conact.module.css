@@ -1,0 +1,599 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Raleway:wght@500;600;700&display=swap");
+
+.page {
+  --orange: #ff5f2e;
+  --orange-deep: #e24a1b;
+  --peach: #fff1ea;
+  --peach-2: #fde3d6;
+  --ink: #23262f;
+  --ink-soft: #5d6270;
+  --line: #ecdcd2;
+  --white: #ffffff;
+  --radius-lg: 24px;
+  --radius-md: 14px;
+  --shadow: 0 18px 50px rgba(120, 70, 40, 0.1);
+  padding:5% 0 15% 0;
+
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: var(--ink);
+  background: var(--white);
+  overflow-x: hidden;
+}
+
+.page * {
+  box-sizing: border-box;
+}
+
+.page svg {
+  width: 1em;
+  height: 1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.page a:focus-visible,
+.page button:focus-visible,
+.page input:focus-visible,
+.page select:focus-visible,
+.page textarea:focus-visible {
+  outline: 3px solid var(--orange);
+  outline-offset: 2px;
+}
+
+/* ---------------- Hero ---------------- */
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 120px 20px 110px;
+  background: linear-gradient(180deg, #ffb08f 0%, #ffd9c6 45%, #ffffff 100%);
+  isolation: isolate;
+}
+
+.blobA,
+.blobB {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  z-index: -1;
+  opacity: 0.55;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+.blobA {
+  width: 320px;
+  height: 320px;
+  background: #ff8a5c;
+  left: -80px;
+  top: 20px;
+}
+.blobB {
+  width: 260px;
+  height: 260px;
+  background: #ffc2a1;
+  right: -60px;
+  top: 60px;
+  animation-delay: -6s;
+}
+
+@keyframes drift {
+  to {
+    transform: translate(40px, 30px) scale(1.12);
+  }
+}
+
+.heroTitle {
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 7vw, 4.6rem);
+  letter-spacing: -0.02em;
+  margin: 0 0 18px;
+}
+
+.crumbs {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 20px rgba(200, 100, 60, 0.12);
+}
+.crumbs a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.crumbs a:hover {
+  color: var(--orange);
+}
+.crumbIcon,
+.crumbSep {
+  color: var(--orange);
+  display: inline-flex;
+}
+
+/* ---------------- Main grid ---------------- */
+.main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 20px 70px;
+  display: grid;
+  grid-template-columns: 0.82fr 1.18fr;
+  gap: 32px;
+  align-items: start;
+}
+
+.infoCard,
+.formCard {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 32px;
+}
+
+.infoCard {
+  background: var(--white);
+  border: 1px solid #f6ebe4;
+}
+.formCard {
+  background: var(--peach);
+  padding: 36px;
+}
+
+.cardTitle {
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: 1.7rem;
+  margin: 0 0 12px;
+}
+.formTitle {
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.9rem, 3.4vw, 2.5rem);
+  margin: 22px 0 12px;
+}
+
+.lead {
+  margin: 0 0 20px;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  max-width: 62ch;
+}
+
+/* live open / closed badge */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: #f1f1f3;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+.status[data-open="true"] {
+  background: #e7f7ec;
+  color: #1c7a3d;
+}
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status[data-open="true"] .dot {
+  animation: pulse 1.8s ease-out infinite;
+}
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(28, 122, 61, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 10px rgba(28, 122, 61, 0);
+  }
+}
+
+.infoList {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+.infoItem {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--line);
+}
+.infoItem:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+.infoIcon {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  color: var(--orange);
+  background: var(--peach);
+  border-radius: 14px;
+  transition: background 0.2s, color 0.2s;
+}
+.infoItem:hover .infoIcon {
+  background: var(--orange);
+  color: var(--white);
+}
+.infoItem h3 {
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin: 0 0 4px;
+}
+.infoItem p,
+.infoItem a {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  word-break: break-word;
+  line-height: 1.5;
+}
+.infoItem a:hover {
+  color: var(--orange);
+  text-decoration: underline;
+}
+
+/* pill label */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px 8px 8px;
+  background: var(--white);
+  border-radius: 999px;
+  font-size: 1rem;
+  box-shadow: 0 6px 18px rgba(200, 100, 60, 0.12);
+}
+.pillStar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--peach);
+  color: var(--orange);
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+/* ---------------- Form ---------------- */
+.form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 26px;
+}
+.wide {
+  grid-column: 1 / -1;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  font: inherit;
+  font-size: 0.92rem;
+  color: var(--ink);
+  background: var(--peach-2);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 14px 16px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.field textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+.field input:hover,
+.field select:hover,
+.field textarea:hover {
+  border-color: var(--line);
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  background: var(--white);
+  border-color: var(--orange);
+  box-shadow: 0 0 0 4px rgba(255, 95, 46, 0.14);
+  outline: none;
+}
+.hasError input,
+.hasError select,
+.hasError textarea {
+  border-color: #c9342b;
+  background: #fff4f3;
+}
+.error {
+  font-size: 0.8rem;
+  color: #c9342b;
+}
+
+/* ---------------- Buttons ---------------- */
+.btn,
+.btnLight,
+.btnGhost,
+.mapBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 999px;
+  transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.btn {
+  background: var(--orange);
+  color: var(--white);
+  border: 0;
+  padding: 7px 7px 7px 26px;
+  box-shadow: 0 10px 24px rgba(255, 95, 46, 0.35);
+}
+.btn:hover {
+  background: var(--orange-deep);
+  transform: translateY(-2px);
+}
+.btnIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--white);
+  color: var(--orange);
+  font-size: 1.1rem;
+  transition: transform 0.25s;
+}
+.btn:hover .btnIcon,
+.mapBtn:hover .btnIcon {
+  transform: rotate(45deg);
+}
+.btnLight {
+  padding: 14px 28px;
+  color: var(--white);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+.btnLight:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--white);
+}
+.btnGhost {
+  padding: 12px 24px;
+  background: transparent;
+  color: var(--orange-deep);
+  border: 2px solid var(--orange);
+}
+.btnGhost:hover {
+  background: var(--orange);
+  color: var(--white);
+}
+
+/* success state */
+.success {
+  margin-top: 28px;
+  padding: 36px 24px;
+  text-align: center;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  animation: pop 0.4s ease-out;
+}
+.success h3 {
+  font-family: "Raleway", sans-serif;
+  font-size: 1.5rem;
+  margin: 14px 0 6px;
+}
+.success p {
+  margin: 0 0 20px;
+  color: var(--ink-soft);
+}
+.successIcon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e7f7ec;
+  color: #1c7a3d;
+  font-size: 1.8rem;
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+/* ---------------- Location ---------------- */
+.locationSection {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+  text-align: center;
+}
+.locationTitle {
+  font-family: "Raleway", sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  line-height: 1.2;
+  max-width: 20ch;
+  margin: 22px auto 36px;
+}
+
+.mapWrap {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 6px solid var(--white);
+  outline: 1px solid var(--line);
+}
+.map {
+  display: block;
+  width: 100%;
+  height: 460px;
+  border: 0;
+}
+
+.mapCard {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 14px 14px 16px;
+  background: var(--white);
+  border-radius: 18px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  max-width: calc(100% - 40px);
+  flex-wrap: wrap;
+}
+.mapPin {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--orange);
+  color: var(--white);
+  font-size: 1.3rem;
+}
+.mapCard strong {
+  display: block;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.05rem;
+}
+.mapCard span {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.mapBtn {
+  background: var(--ink);
+  color: var(--white);
+  padding: 4px 4px 4px 18px;
+  font-size: 0.85rem;
+}
+.mapBtn:hover {
+  background: var(--orange);
+}
+.mapBtn .btnIcon {
+  width: 32px;
+  height: 32px;
+  color: var(--ink);
+}
+
+/* ---------------- Closing band ---------------- */
+.band {
+  background: var(--ink);
+  color: var(--white);
+  text-align: center;
+  padding: 90px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.band::before {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 95, 46, 0.35), transparent 65%);
+  left: 50%;
+  top: -260px;
+  transform: translateX(-50%);
+}
+.bandTitle {
+  position: relative;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  color: var(--orange);
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+.band p {
+  position: relative;
+  margin: 0 auto 30px;
+  color: #c9ccd4;
+}
+.bandActions {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 960px) {
+  .main {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .hero {
+    padding: 90px 16px 80px;
+  }
+  .form {
+    grid-template-columns: 1fr;
+  }
+  .infoCard,
+  .formCard {
+    padding: 24px 20px;
+  }
+  .map {
+    height: 380px;
+  }
+  .mapCard {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blobA,
+  .blobB,
+  .dot,
+  .success {
+    animation: none;
+  }
+  .btn,
+  .btnIcon {
+    transition: none;
+  }
+}

@@ -11,7 +11,7 @@ import styles from './Leadership.module.css';
    4. `solves`, `when`, `bring` are written for students. Keep them plain.
    ===================================================================== */
 
-const MEKAI_URL = '#'; // link to your Mekai system request page
+const MEKARI_URL = '#'; // link to your Mekari system request page
 
 /* Sample photo for anyone who has no photo file yet.
    Paste an image link or a path here, for example '/images/leaders/sample.jpg'.
@@ -26,22 +26,230 @@ const GROUPS = [
   { id: 'support', label: 'Digital & communication' },
 ];
 
-const QUICK = [
-  { label: 'Registration', q: 'registration' },
-  { label: 'Grade or transcript', q: 'transcript' },
-  { label: 'Exam appeal', q: 'appeal' },
-  { label: 'Scholarship or fees', q: 'scholarship' },
-  { label: 'Dormitory', q: 'dormitory' },
-  { label: 'Feeling sick', q: 'sick' },
-  { label: 'Mekai login', q: 'login' },
-  { label: 'Library', q: 'library' },
-  { label: 'Stress or advice', q: 'counselling' },
+/* ---------------------------------------------------------------------
+   HELP GUIDES (same shape as help_guides + help_guide_steps in Mekari)
+   Real problems, written step by step. Rules from the Mekari document:
+   - Never invent office numbers. Leave room as null until you know it.
+   - room: 'Online' for steps done on the website.
+   - who: id of a person below, so the step can link to that leader.
+   - photo: file name inside public/images/guides/ (optional).
+   --------------------------------------------------------------------- */
+const LANGS = [
+  { id: 'en', label: 'English' },
+  { id: 'am', label: 'አማርኛ' },
 ];
+
+const GUIDES = [
+  {
+    id: 'registration',
+    category: 'registration',
+    title_en: 'Fix a registration problem',
+    title_am: 'የምዝገባ ችግር',
+    keywords: ['registration', 'register', 'add', 'drop', 'course', 'missing', 'ምዝገባ'],
+    steps: [
+      { no: 1, text_en: 'Go to the Registrar office.', text_am: 'ወደ ሬጅስትራር ቢሮ ይሂዱ።', office: 'Registrar', room: '123', photo: 'registrar.jpg', who: 'registrar' },
+      { no: 2, text_en: 'Then visit the side office.', text_am: 'ከዚያ ወደ ጎን ቢሮ ይሂዱ።', office: 'Side office', room: 'Not set', photo: null },
+      { no: 3, text_en: 'Finally visit your department head.', text_am: 'በመጨረሻ የትምህርት ክፍል ኃላፊውን ይጎብኙ።', office: 'Department head', room: '232', photo: 'head.jpg' },
+    ],
+  },
+  {
+    id: 'transcript',
+    category: 'records',
+    title_en: 'Fix a grade or get a transcript',
+    title_am: 'ውጤት ማስተካከል ወይም ትራንስክሪፕት ማግኘት',
+    keywords: ['grade', 'result', 'mark', 'transcript', 'certificate', 'letter', 'ውጤት', 'ትራንስክሪፕት'],
+    steps: [
+      { no: 1, text_en: 'Check your grade in Mekari first and take a screenshot.', text_am: 'መጀመሪያ ውጤትዎን በመካሪ ይመልከቱ፤ ምስሉንም ያንሱ።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 2, text_en: 'Go to the Registrar with your student ID. For a transcript, bring the payment receipt.', text_am: 'የተማሪ መታወቂያዎን ይዘው ወደ ሬጅስትራር ይሂዱ። ትራንስክሪፕት ከፈለጉ የክፍያ ደረሰኝ ይዘው ይሂዱ።', office: 'Registrar', room: null, photo: null, who: 'registrar' },
+      { no: 3, text_en: 'Grade still wrong? Ask your department head to confirm it.', text_am: 'ውጤቱ አሁንም ስህተት ከሆነ የትምህርት ክፍል ኃላፊዎን እንዲያረጋግጥ ይጠይቁ።', office: 'Department head', room: null, photo: null },
+    ],
+  },
+  {
+    id: 'appeal',
+    category: 'exams',
+    title_en: 'Appeal an exam result',
+    title_am: 'የፈተና ውጤት ይግባኝ',
+    keywords: ['exam', 'appeal', 'result', 'complaint', 'unfair', 'ፈተና', 'ይግባኝ'],
+    steps: [
+      { no: 1, text_en: 'Talk to your teacher or department head and ask to see your exam paper.', text_am: 'መምህርዎን ወይም የትምህርት ክፍል ኃላፊዎን አነጋግረው የፈተና ወረቀትዎን ለማየት ይጠይቁ።', office: 'Department head', room: null, photo: null },
+      { no: 2, text_en: 'Write a short appeal letter and give it to your department head.', text_am: 'አጭር የይግባኝ ደብዳቤ ጽፈው ለትምህርት ክፍል ኃላፊ ያስረክቡ።', office: 'Department head', room: null, photo: null },
+      { no: 3, text_en: 'No answer? Go to your college dean, then to the Vice President, Academic Affairs.', text_am: 'መልስ ካላገኙ ወደ ኮሌጅ ዲን፣ ከዚያም ወደ አካዳሚክ ጉዳይ ም/ፕሬዚዳንት ይሂዱ።', office: 'Academic Vice President', room: null, photo: null, who: 'vp-academic' },
+    ],
+  },
+  {
+    id: 'fees',
+    category: 'finance',
+    title_en: 'Fix a fee, payment or scholarship problem',
+    title_am: 'የክፍያ ወይም የስኮላርሺፕ ችግር',
+    keywords: ['fee', 'fees', 'payment', 'scholarship', 'cost sharing', 'receipt', 'allowance', 'ክፍያ', 'ስኮላርሺፕ'],
+    steps: [
+      { no: 1, text_en: 'Keep your receipt or bank slip. Note the date and the amount.', text_am: 'ደረሰኝዎን ወይም የባንክ ወረቀትዎን ያስቀምጡ። ቀኑንና መጠኑን ይጻፉ።', office: 'Your own papers', room: null, photo: null },
+      { no: 2, text_en: 'Go to Student Finance with your student ID and the receipt.', text_am: 'የተማሪ መታወቂያዎንና ደረሰኙን ይዘው ወደ ተማሪዎች ፋይናንስ ይሂዱ።', office: 'Student Finance', room: null, photo: null, who: 'scholarship' },
+      { no: 3, text_en: 'Still not solved? Ask the Dean of Students.', text_am: 'ካልተፈታ የተማሪዎች ዲንን ይጠይቁ።', office: 'Dean of Students', room: null, photo: null, who: 'dean-students' },
+    ],
+  },
+  {
+    id: 'dormitory',
+    category: 'dormitory',
+    title_en: 'Get or fix a dormitory room',
+    title_am: 'የመኝታ ክፍል ማግኘት ወይም ማስተካከል',
+    keywords: ['dormitory', 'dorm', 'room', 'bed', 'water', 'power', 'cafeteria', 'መኝታ', 'ዶርም'],
+    steps: [
+      { no: 1, text_en: 'Take your student ID. Know your block and room number.', text_am: 'የተማሪ መታወቂያዎን ይያዙ። የብሎክዎንና የክፍልዎን ቁጥር ይወቁ።', office: 'Your own papers', room: null, photo: null },
+      { no: 2, text_en: 'Go to Student Services. For a broken bed, water or power, show a photo.', text_am: 'ወደ ተማሪዎች አገልግሎት ይሂዱ። የተሰበረ አልጋ፣ ውሃ ወይም መብራት ችግር ከሆነ ፎቶ ያሳዩ።', office: 'Student Services', room: null, photo: null, who: 'student-services' },
+      { no: 3, text_en: 'No help? Go to the Dean of Students.', text_am: 'እርዳታ ካላገኙ ወደ ተማሪዎች ዲን ይሂዱ።', office: 'Dean of Students', room: null, photo: null, who: 'dean-students' },
+    ],
+  },
+  {
+    id: 'sick',
+    category: 'health',
+    title_en: 'Get medical help',
+    title_am: 'የሕክምና እርዳታ ማግኘት',
+    keywords: ['sick', 'health', 'clinic', 'medicine', 'hospital', 'referral', 'illness', 'ህመም', 'ክሊኒክ'],
+    steps: [
+      { no: 1, text_en: 'Go to the university clinic with your student ID.', text_am: 'የተማሪ መታወቂያዎን ይዘው ወደ ዩኒቨርሲቲው ክሊኒክ ይሂዱ።', office: 'University clinic', room: null, photo: null, who: 'health' },
+      { no: 2, text_en: 'If you need a hospital, ask for a referral letter.', text_am: 'ሆስፒታል ከፈለጉ የሪፈራል ደብዳቤ ይጠይቁ።', office: 'University clinic', room: null, photo: null, who: 'health' },
+      { no: 3, text_en: 'Missed class or an exam? Ask for a medical letter and give a copy to your department head.', text_am: 'ክፍል ወይም ፈተና ካመለጠዎት የሕክምና ደብዳቤ ጠይቀው ቅጂውን ለትምህርት ክፍል ኃላፊ ይስጡ።', office: 'Department head', room: null, photo: null },
+    ],
+  },
+  {
+    id: 'library',
+    category: 'library',
+    title_en: 'Borrow books or use the library',
+    title_am: 'መጻሕፍት መዋስ ወይም ቤተ መጻሕፍት መጠቀም',
+    keywords: ['library', 'book', 'borrow', 'fine', 'journal', 'ebook', 'ቤተ መጻሕፍት', 'መጽሐፍ'],
+    steps: [
+      { no: 1, text_en: 'Go to the library desk with your student ID.', text_am: 'የተማሪ መታወቂያዎን ይዘው ወደ ቤተ መጻሕፍት ጠረጴዛ ይሂዱ።', office: 'Library', room: null, photo: null, who: 'library' },
+      { no: 2, text_en: 'For e-books and journals, ask the desk how to get access.', text_am: 'ለኢ-መጻሕፍትና ጆርናሎች እንዴት መግባት እንደሚችሉ ጠረጴዛው ላይ ይጠይቁ።', office: 'Library', room: null, photo: null, who: 'library' },
+      { no: 3, text_en: 'A fine looks wrong? Ask the Library Director.', text_am: 'ቅጣቱ ስህተት ከሆነ የቤተ መጻሕፍት ዳይሬክተሩን ይጠይቁ።', office: 'Library Director', room: null, photo: null, who: 'library' },
+    ],
+  },
+  {
+    id: 'counselling',
+    category: 'wellbeing',
+    title_en: 'Get advice or talk to someone',
+    title_am: 'ምክር ማግኘት ወይም ማውራት',
+    keywords: ['stress', 'advice', 'counselling', 'counseling', 'worry', 'mental', 'family', 'ጭንቀት', 'ምክር'],
+    steps: [
+      { no: 1, text_en: 'Walk in to Guidance and Counselling. It is private and free.', text_am: 'ወደ ምክርና መመሪያ ቢሮ ይግቡ። ግላዊና ነጻ ነው።', office: 'Guidance and Counselling', room: null, photo: null, who: 'counselling' },
+      { no: 2, text_en: 'Say what is worrying you: study stress, family or your plans.', text_am: 'የሚያስጨንቅዎትን ይንገሩ፤ የትምህርት ጭንቀት፣ ቤተሰብ ወይም እቅድዎ።', office: 'Guidance and Counselling', room: null, photo: null, who: 'counselling' },
+      { no: 3, text_en: 'If your grades are falling, ask for a study plan.', text_am: 'ውጤትዎ እየቀነሰ ከሆነ የጥናት እቅድ ይጠይቁ።', office: 'Guidance and Counselling', room: null, photo: null, who: 'counselling' },
+    ],
+  },
+  {
+    id: 'change-dept',
+    category: 'registration',
+    title_en: 'Change your department',
+    title_am: 'የትምህርት ክፍል መቀየር',
+    keywords: ['change', 'department', 'transfer', 'switch', 'fresh', 'ትምህርት ክፍል', 'መቀየር'],
+    steps: [
+      { no: 1, text_en: 'Talk to your current department head and the head of the department you want.', text_am: 'አሁን ያሉበትን የትምህርት ክፍል ኃላፊና መግባት የሚፈልጉበትን ክፍል ኃላፊ ያነጋግሩ።', office: 'Department heads', room: null, photo: null },
+      { no: 2, text_en: 'Take both replies to the Registrar.', text_am: 'ሁለቱንም ምላሾች ወደ ሬጅስትራር ይውሰዱ።', office: 'Registrar', room: null, photo: null, who: 'registrar' },
+      { no: 3, text_en: 'Wait for the decision. Then check Mekari to see your new department.', text_am: 'ውሳኔውን ይጠብቁ። ከዚያ አዲሱን የትምህርት ክፍልዎን በመካሪ ይመልከቱ።', office: 'Mekari website', room: 'Online', photo: null },
+    ],
+  },
+  {
+    id: 'account',
+    category: 'account',
+    title_en: 'Create your Mekari account',
+    title_am: 'የመካሪ መለያ ይፍጠሩ',
+    keywords: ['account', 'register', 'sign up', 'signup', 'login', 'log in', 'google', 'መለያ', 'መግቢያ'],
+    steps: [
+      { no: 1, text_en: 'Open Mekari and press Login or Register. You can use your email or Google.', text_am: 'መካሪን ከፍተው ግባ ወይም ተመዝገብ ይጫኑ። ኢሜይልዎን ወይም ጎግል መጠቀም ይችላሉ።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 2, text_en: 'Choose Student. Say if you are fresh (not yet in a department) or already in one.', text_am: 'ተማሪ ይምረጡ። አዲስ (ገና ወደ ትምህርት ክፍል ያልገቡ) ወይም በትምህርት ክፍል ውስጥ እንዳሉ ይንገሩ።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 3, text_en: 'After login you return to the page you opened. Your dashboard is ready.', text_am: 'ከገቡ በኋላ ወደከፈቱት ገጽ ይመለሳሉ። ዳሽቦርድዎ ዝግጁ ነው።', office: 'Mekari website', room: 'Online', photo: null },
+    ],
+  },
+  {
+    id: 'login-fix',
+    category: 'account',
+    title_en: 'Fix a Mekari login problem',
+    title_am: 'የመካሪ መግቢያ ችግር',
+    keywords: ['login', 'log in', 'password', 'forgot', 'reset', 'cannot', 'error', 'የይለፍ ቃል', 'መግባት'],
+    steps: [
+      { no: 1, text_en: 'On the login page press Forgot password and enter your email.', text_am: 'በመግቢያ ገጹ ላይ የይለፍ ቃል ረሳሁ የሚለውን ጠቅ አድርገው ኢሜይልዎን ያስገቡ።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 2, text_en: 'Open the reset email and choose a new password. Mekari never shows a password to anyone, not even the admin.', text_am: 'የደረሰዎትን ኢሜይል ከፍተው አዲስ የይለፍ ቃል ይምረጡ። መካሪ የይለፍ ቃልን ለማንም አያሳይም፤ ለአስተዳዳሪውም ጭምር።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 3, text_en: 'Still stuck? Take a screenshot of the error and visit the ICT office.', text_am: 'አሁንም ካልተፈታ የስህተቱን ምስል አንስተው ወደ ICT ቢሮ ይሂዱ።', office: 'ICT office', room: null, photo: null, who: 'ict' },
+    ],
+  },
+  {
+    id: 'department',
+    category: 'departments',
+    title_en: 'See your department details',
+    title_am: 'የትምህርት ክፍልዎን መረጃ ይመልከቱ',
+    keywords: ['department', 'course', 'courses', 'prerequisites', 'graduates', 'duration', 'interested', 'ትምህርት ክፍል', 'ኮርስ'],
+    steps: [
+      { no: 1, text_en: 'Login first. Detailed department pages are shown only after login.', text_am: 'መጀመሪያ ይግቡ። ዝርዝር የትምህርት ክፍል መረጃ የሚታየው ከገቡ በኋላ ነው።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 2, text_en: 'Current students open My department: duration, courses, prerequisites and graduates.', text_am: 'የአሁን ተማሪዎች የእኔ ትምህርት ክፍልን ይክፈቱ፤ የቆይታ ጊዜ፣ ኮርሶች፣ ቅድመ ሁኔታዎችና ተመራቂዎች ይገኛሉ።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 3, text_en: 'Fresh students press Interested on the departments they like. Department heads can see this list.', text_am: 'አዲስ ተማሪዎች የሚወዷቸውን የትምህርት ክፍሎች ፍላጎት አለኝ ይበሉ። የትምህርት ክፍል ኃላፊዎች ይህንን ዝርዝር ያያሉ።', office: 'Mekari website', room: 'Online', photo: null },
+    ],
+  },
+  {
+    id: 'opportunities',
+    category: 'opportunities',
+    title_en: 'Find opportunities and follow unions',
+    title_am: 'እድሎችን ማግኘትና ማህበራትን መከተል',
+    keywords: ['opportunity', 'opportunities', 'union', 'club', 'news', 'motivation', 'event', 'እድል', 'ማህበር'],
+    steps: [
+      { no: 1, text_en: 'Open Opportunities or your dashboard. New posts from your department and unions come first.', text_am: 'እድሎችን ወይም ዳሽቦርድዎን ይክፈቱ። ከትምህርት ክፍልዎና ከማህበራት አዳዲስ ልጥፎች መጀመሪያ ይታያሉ።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 2, text_en: 'Open a union page (Student union, Sport, Tech Club, Media Art, AppFactory) to read its news and calls.', text_am: 'ዜናዎችንና ጥሪዎችን ለማንበብ የማህበር ገጽ ይክፈቱ (የተማሪዎች ማህበር፣ ስፖርት፣ ቴክ ክለብ፣ ሚዲያ አርት፣ AppFactory)።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 3, text_en: 'Not sure which one fits you? Ask the chatbot.', text_am: 'የትኛው እንደሚስማማዎት ካላወቁ ቻትቦቱን ይጠይቁ።', office: 'Mekari chatbot', room: 'Online', photo: null },
+    ],
+  },
+  {
+    id: 'my-library',
+    category: 'library',
+    title_en: 'Create your personal library',
+    title_am: 'የግል ቤተ መጻሕፍትዎን ይፍጠሩ',
+    keywords: ['personal library', 'library', 'upload', 'documents', 'files', 'save', 'የግል'],
+    steps: [
+      { no: 1, text_en: 'On your dashboard press Create my library. Fresh students can skip this and do it later.', text_am: 'በዳሽቦርድዎ ላይ ቤተ መጻሕፍቴን ፍጠር ይጫኑ። አዲስ ተማሪዎች ይህንን ዘለው በኋላ ማድረግ ይችላሉ።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 2, text_en: 'Save official documents or upload your own files. Each file can be up to 20 MB.', text_am: 'ኦፊሴላዊ ሰነዶችን ያስቀምጡ ወይም የራስዎን ፋይሎች ይጫኑ። እያንዳንዱ ፋይል እስከ 20 MB ሊሆን ይችላል።', office: 'Mekari website', room: 'Online', photo: null },
+      { no: 3, text_en: 'Only you can see your library. No one else can open it.', text_am: 'ቤተ መጻሕፍትዎን እርስዎ ብቻ ማየት ይችላሉ። ሌላ ማንም ሊከፍተው አይችልም።', office: 'Mekari website', room: 'Online', photo: null },
+    ],
+  },
+  {
+    id: 'chatbot',
+    category: 'help',
+    title_en: 'Ask the Mekari chatbot',
+    title_am: 'የመካሪ ቻትቦትን ይጠይቁ',
+    keywords: ['chatbot', 'chat', 'ask', 'question', 'help', 'ai', 'ጥያቄ', 'ቻት'],
+    steps: [
+      { no: 1, text_en: 'After login, open the chat window on any page.', text_am: 'ከገቡ በኋላ በማንኛውም ገጽ የቻት መስኮቱን ይክፈቱ።', office: 'Mekari chatbot', room: 'Online', photo: null },
+      { no: 2, text_en: 'Write in Amharic or English. Each answer names its source, for example the department page.', text_am: 'በአማርኛ ወይም በእንግሊዝኛ ይጻፉ። እያንዳንዱ መልስ ምንጩን ይጠቅሳል፤ ለምሳሌ የትምህርት ክፍሉን ገጽ።', office: 'Mekari chatbot', room: 'Online', photo: null },
+      { no: 3, text_en: 'If it does not know, your question is saved so staff can write a guide. It never guesses office numbers or fees.', text_am: 'ካላወቀ ጥያቄዎ ይቀመጣል፤ ሠራተኞችም መመሪያ ይጽፋሉ። የቢሮ ቁጥርንም ሆነ ክፍያን አይገምትም።', office: 'Mekari chatbot', room: 'Online', photo: null },
+    ],
+  },
+];
+
+const GUIDE_BY_ID = Object.fromEntries(GUIDES.map((g) => [g.id, g]));
+
+/* Chips: real problems. Each one opens its guide directly. */
+const QUICK = [
+  { label: 'Fix my registration', guide: 'registration' },
+  { label: 'Grade or transcript', guide: 'transcript' },
+  { label: 'Exam appeal', guide: 'appeal' },
+  { label: 'Fees or scholarship', guide: 'fees' },
+  { label: 'Dormitory', guide: 'dormitory' },
+  { label: 'Feeling sick', guide: 'sick' },
+  { label: 'Mekari login problem', guide: 'login-fix' },
+  { label: 'Library', guide: 'library' },
+  { label: 'Stress or advice', guide: 'counselling' },
+  { label: 'Change department', guide: 'change-dept' },
+  { label: 'Create an account', guide: 'account' },
+  { label: 'Opportunities & unions', guide: 'opportunities' },
+];
+
+const roomLabel = (room) => {
+  if (room === 'Online') return 'Online';
+  if (!room || /^not set/i.test(room)) return 'room not set yet';
+  return `Room ${room}`;
+};
 
 const STEPS = [
   { title: 'Start at the right office', text: 'Most problems are solved by the office that owns them. Use the finder above to see which one.' },
-  { title: 'Bring your proof', text: 'ID card, forms, receipts or screenshots from Mekai. Clear papers mean a faster answer.' },
-  { title: 'Ask in Mekai', text: 'Send your request in Mekai so there is a record. Wait for the reply time that office gives.' },
+  { title: 'Bring your proof', text: 'ID card, forms, receipts or screenshots from Mekari. Clear papers mean a faster answer.' },
+  { title: 'Ask in Mekari', text: 'Send your request in Mekari so there is a record. Wait for the reply time that office gives.' },
   { title: 'Go one level up', text: 'No answer? Go to the director, then the vice president, and the President last.' },
 ];
 
@@ -128,7 +336,7 @@ const PEOPLE = [
       'The college dean and the Registrar could not solve your academic problem',
       'You want to appeal an academic decision',
     ],
-    bring: ['Your Mekai request number', 'Reply letters from the dean or Registrar'],
+    bring: ['Your Mekari request number', 'Reply letters from the dean or Registrar'],
     tags: 'academic exam appeal grade complaint course teacher program calendar',
   },
   {
@@ -139,7 +347,7 @@ const PEOPLE = [
     title: 'Vice President, Research & Community Service',
     name: '',
     summary:
-      'Leads research, innovation and the work the university does for the community. Also guides technology and digital projects such as Mekai.',
+      'Leads research, innovation and the work the university does for the community. Also guides technology and digital projects such as Mekari.',
     solves: [
       'Approves student research projects, thesis support and research funding',
       'Organizes community service and technology transfer programs',
@@ -189,11 +397,11 @@ const PEOPLE = [
       'Readmission, withdrawal and changing your department',
     ],
     when: [
-      'Your name or courses are missing or wrong in Mekai',
+      'Your name or courses are missing or wrong in Mekari',
       'You see a wrong grade or a missing grade',
       'You need an official letter or transcript',
     ],
-    bring: ['Student ID', 'Screenshot of the problem in Mekai', 'Payment receipt if you request a document'],
+    bring: ['Student ID', 'Screenshot of the problem in Mekari', 'Payment receipt if you request a document'],
     tags: 'registrar registration add drop course grade result mark transcript certificate id readmission withdrawal department change record',
   },
   {
@@ -335,7 +543,7 @@ const PEOPLE = [
       'Manages cost sharing, payments, scholarships and monthly student allowances.',
     solves: [
       'Questions about cost sharing and what you owe',
-      'Payment receipts that do not show in Mekai',
+      'Payment receipts that do not show in Mekari',
       'Scholarship and allowance questions',
     ],
     when: [
@@ -384,7 +592,7 @@ const PEOPLE = [
       'You feel overwhelmed and want someone to listen',
       'You are on academic warning and want a plan',
     ],
-    bring: ['Nothing. You can simply walk in or book through Mekai'],
+    bring: ['Nothing. You can simply walk in or book through Mekari'],
     tags: 'counselling counseling guidance stress mental advice career study skills warning worry family',
   },
   {
@@ -392,21 +600,21 @@ const PEOPLE = [
     group: 'support',
     reportsTo: 'vp-research',
     short: 'IT',
-    title: 'ICT Director (Mekai System)',
+    title: 'ICT Director (Mekari System)',
     name: '',
     summary:
-      'Keeps Mekai, campus Wi-Fi and student email running. Fixes accounts and system errors.',
+      'Keeps Mekari, campus Wi-Fi and student email running. Fixes accounts and system errors.',
     solves: [
-      'Mekai login problems and forgotten passwords',
+      'Mekari login problems and forgotten passwords',
       'Errors, wrong data display or a page that does not open',
       'Campus Wi-Fi and student email problems',
     ],
     when: [
-      'You cannot log in to Mekai',
-      'Mekai shows an error or something that looks wrong',
+      'You cannot log in to Mekari',
+      'Mekari shows an error or something that looks wrong',
     ],
     bring: ['Screenshot of the error', 'Your student ID', 'Time it happened'],
-    tags: 'ict mekai login password account wifi internet email system error bug website technical',
+    tags: 'ict mekari login password account wifi internet email system error bug website technical',
   },
   {
     id: 'comms',
@@ -484,6 +692,21 @@ function Photo({ src, className }) {
   );
 }
 
+function StepImage({ file }) {
+  const [bad, setBad] = useState(false);
+  if (!file || bad) return null;
+  return (
+    <img
+      className={styles.gPhoto}
+      src={`/images/guides/${file}`}
+      alt=""
+      loading="lazy"
+      decoding="async"
+      onError={() => setBad(true)}
+    />
+  );
+}
+
 function Silhouette({ className = '' }) {
   return (
     <svg viewBox="0 0 100 100" className={`${styles.sil} ${className}`} aria-hidden="true" preserveAspectRatio="xMidYMax meet">
@@ -537,7 +760,24 @@ function Leadership() {
   const [campus, setCampus] = useState('all');
   const dirRef = useRef(null);
   const [query, setQuery] = useState('');
+  const [guideId, setGuideId] = useState(null);
+  const [lang, setLang] = useState('en');
   const spotRef = useRef(null);
+  const guideRef = useRef(null);
+  const guide = guideId ? GUIDE_BY_ID[guideId] : null;
+  const pick = (g, k) => g[`${k}_${lang}`] || g[`${k}_en`];
+
+  useEffect(() => {
+    if (guideId && guideRef.current) {
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      guideRef.current.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }
+  }, [guideId]);
+
+  const openGuide = (id) => {
+    setGuideId(id);
+    setQuery('');
+  };
 
   const selected = BY_ID[selectedId];
   const boss = selected.reportsTo ? BY_ID[selected.reportsTo] : null;
@@ -548,6 +788,17 @@ function Leadership() {
     if (!words.length) return [];
     return LIST.filter((p) => {
       const hay = [p.title, p.name, p.summary, p.solves.join(' '), p.tags].join(' ').toLowerCase();
+      return words.every((w) => hay.includes(w));
+    }).slice(0, 2);
+  }, [query]);
+
+  const guideMatches = useMemo(() => {
+    const words = query.toLowerCase().split(/\s+/).filter((w) => w.length > 1);
+    if (!words.length) return [];
+    return GUIDES.filter((g) => {
+      const hay = [g.title_en, g.title_am, g.category, g.keywords.join(' '), g.steps.map((x) => x.text_en).join(' ')]
+        .join(' ')
+        .toLowerCase();
       return words.every((w) => hay.includes(w));
     }).slice(0, 4);
   }, [query]);
@@ -604,13 +855,14 @@ function Leadership() {
                 onChange={(e) => setQuery(e.target.value)}
                 autoComplete="off"
               />
+              <p className={styles.finderHint}>Tap a real problem to get the steps, the office and the room.</p>
               <div className={styles.quick}>
                 {QUICK.map((c) => (
                   <button
-                    key={c.q}
+                    key={c.guide}
                     type="button"
-                    className={`${styles.quickChip} ${query === c.q ? styles.quickOn : ''}`}
-                    onClick={() => setQuery(c.q)}
+                    className={`${styles.quickChip} ${guideId === c.guide ? styles.quickOn : ''}`}
+                    onClick={() => openGuide(c.guide)}
                   >
                     {c.label}
                   </button>
@@ -618,11 +870,22 @@ function Leadership() {
               </div>
 
               <div className={styles.results} aria-live="polite">
-                {query.trim() && matches.length === 0 && (
+                {query.trim() && guideMatches.length === 0 && matches.length === 0 && (
                   <p className={styles.noMatch}>
-                    No exact match. Start with the Registrar, or send your question through Mekai.
+                    We do not have a guide for this yet. Ask the Mekari chatbot. Your question is saved so staff can write a guide.
                   </p>
                 )}
+                {guideMatches.length > 0 && <p className={styles.resultLabel}>Step-by-step guides</p>}
+                {guideMatches.map((g) => (
+                  <button key={g.id} type="button" className={styles.result} onClick={() => openGuide(g.id)}>
+                    <span className={styles.resultNum}>{g.steps.length}</span>
+                    <span>
+                      <strong>{g.title_en}</strong>
+                      <em lang="am">{g.title_am}</em>
+                    </span>
+                  </button>
+                ))}
+                {matches.length > 0 && <p className={styles.resultLabel}>Leaders who can help</p>}
                 {matches.map((p) => (
                   <button key={p.id} type="button" className={styles.result} onClick={() => select(p.id)}>
                     <Avatar p={p} className={styles.resultAvatar} />
@@ -637,6 +900,70 @@ function Leadership() {
           </div>
         </div>
       </header>
+
+      {/* ===== STEP-BY-STEP GUIDE ===== */}
+      {guide && (
+        <div className={styles.guideWrap} id="guide" ref={guideRef}>
+          <div className={styles.container}>
+            <div className={styles.guide} key={guide.id}>
+              <div className={styles.guideHead}>
+                <div>
+                  <p className={styles.kicker}>Step-by-step guide &middot; {guide.category}</p>
+                  <h2 className={styles.guideTitle} lang={lang}>{pick(guide, 'title')}</h2>
+                </div>
+                <div className={styles.guideTools}>
+                  <div className={styles.langs} role="group" aria-label="Language">
+                    {LANGS.map((l) => (
+                      <button
+                        key={l.id}
+                        type="button"
+                        aria-pressed={lang === l.id}
+                        className={`${styles.langBtn} ${lang === l.id ? styles.langOn : ''}`}
+                        onClick={() => setLang(l.id)}
+                      >
+                        {l.label}
+                      </button>
+                    ))}
+                  </div>
+                  <button type="button" className={styles.closeBtn} onClick={() => setGuideId(null)} aria-label="Close guide">
+                    &times;
+                  </button>
+                </div>
+              </div>
+
+              <ol className={styles.gSteps}>
+                {guide.steps.map((st) => (
+                  <li key={st.no} className={styles.gStep}>
+                    <span className={styles.gNo}>{st.no}</span>
+                    <div className={styles.gBody}>
+                      <p className={styles.gText} lang={lang}>{st[`text_${lang}`] || st.text_en}</p>
+                      <p className={styles.gOffice}>
+                        <svg viewBox="0 0 24 24" className={styles.pin} aria-hidden="true">
+                          <path d="M12 21s7-6.2 7-11.5A7 7 0 0 0 5 9.5C5 14.8 12 21 12 21z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+                          <circle cx="12" cy="9.5" r="2.4" fill="currentColor" />
+                        </svg>
+                        <b>{st.office}</b> &middot; <span className={roomLabel(st.room) === 'room not set yet' ? styles.gMuted : ''}>{roomLabel(st.room)}</span>
+                      </p>
+                      <StepImage file={st.photo} />
+                      {st.who && BY_ID[st.who] && (
+                        <button type="button" className={styles.linkBtn} onClick={() => select(st.who)}>
+                          See who leads: {BY_ID[st.who].title}
+                        </button>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ol>
+
+              <p className={styles.gNote}>
+                Office numbers come from guides written by admins, heads and unions. If a room says
+                &ldquo;not set yet&rdquo;, ask the office or the chatbot. We never guess.{' '}
+                <a href={MEKARI_URL}>Ask the Mekari chatbot</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ===== SPOTLIGHT ===== */}
       <div className={styles.spotWrap} id="profile" ref={spotRef}>
@@ -682,7 +1009,7 @@ function Leadership() {
               <Offices p={selected} className={styles.officesBig} />
 
               <div className={styles.spotFoot}>
-                <a className={styles.btnPrimary} href={MEKAI_URL}>Ask through Mekai</a>
+                <a className={styles.btnPrimary} href={MEKARI_URL}>Ask through Mekari</a>
                 {boss && (
                   <button type="button" className={styles.linkBtn} onClick={() => select(boss.id, false)}>
                     Reports to: {boss.title}

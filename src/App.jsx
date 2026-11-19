@@ -18,6 +18,7 @@ import Loding from './components/Loding/Loding';
 import About from './pages/About/About';
 import MissionVision from './components/Mission/MissionVision';
 import Leadership from './components/Leaderships/Leadership';
+import Contact from "./components/Contact/Contact";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -54,6 +55,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path='/mission' element={<MissionVision/>}/>
             <Route path='/leader' element={<Leadership/>}/>
+            <Route path= "/contact" element= {<Contact/>}/>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
