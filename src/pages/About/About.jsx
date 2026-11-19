@@ -125,6 +125,9 @@ const FACTS = [
   { label: 'Type', value: 'Public \u00b7 Applied Sciences University' },
 ];
 
+const HISTORY_PHOTO =
+  'https://static.wixstatic.com/media/118341_b124faf4e2b8400a8ebfca993a20ad44~mv2.jpg/v1/fill/w_1000,h_666,al_c,q_85,usm_0.66_1.00_0.01/118341_b124faf4e2b8400a8ebfca993a20ad44~mv2.jpg';
+
 /* ---------- Small helpers ---------- */
 const icons = {
   flask: (
@@ -159,6 +162,12 @@ function Icon({ name }) {
 /* Shows the photo if it loads; renders nothing (the placeholder behind it shows) if not */
 function Photo({ src, className, alt = '', eager = false }) {
   const [failed, setFailed] = useState(false);
+
+  // Retry if the src changes
+  useEffect(() => {
+    setFailed(false);
+  }, [src]);
+
   if (!src || failed) return null;
   return (
     <img
@@ -166,6 +175,8 @@ function Photo({ src, className, alt = '', eager = false }) {
       src={src}
       alt={alt}
       loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      referrerPolicy="no-referrer"
       onError={() => setFailed(true)}
     />
   );
@@ -357,7 +368,7 @@ function About() {
               </div>
               <Photo
                 className={styles.photoFill}
-                src="https://static.wixstatic.com/media/118341_b124faf4e2b8400a8ebfca993a20ad44~mv2.jpg/v1/fill/w_1000,h_666,al_c,q_85,usm_0.66_1.00_0.01/118341_b124faf4e2b8400a8ebfca993a20ad44~mv2.jpg"
+                src={HISTORY_PHOTO}
                 alt="The city of Dessie and the Wollo highlands"
               />
             </div>
@@ -437,7 +448,8 @@ function About() {
               <div className={styles.photoFallback}>
                 <span>{g.label}</span>
               </div>
-              <Photo className={styles.photoFill} src={g.src} alt={g.caption} />
+              {/* alt is empty because the figcaption already describes the photo */}
+              <Photo className={styles.photoFill} src={g.src} alt="" />
               <figcaption>{g.caption}</figcaption>
             </figure>
           ))}

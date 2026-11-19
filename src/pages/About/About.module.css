@@ -34,12 +34,12 @@
   font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color: var(--a-text);
   background: var(--a-surface);
-  overflow-x: hidden;
+  overflow-x: clip;   /* clip (not hidden) so position: sticky keeps working */
+  isolation: isolate; /* lets z-index: -1 decorations show above the page background */
 }
 
 .container {
-  position: relative;
-  z-index: 1;
+  position: relative; /* no z-index: it would trap the stats below the hero curve */
   width: min(1180px, 100% - 40px);
   margin: 0 auto;
 }
@@ -73,6 +73,7 @@
   letter-spacing: 0.3px;
   text-transform: uppercase;
   color: var(--a-red);
+  overflow-wrap: anywhere;
 }
 .headingLight {
   color: #fff;
@@ -113,6 +114,7 @@
   color: #fff;
   border: 2px solid rgba(255, 255, 255, 0.8);
   background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 }
 .btnGhost:hover {
@@ -222,6 +224,7 @@
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.5px;
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
 .heroTitle {
@@ -231,6 +234,7 @@
   font-weight: 700;
   letter-spacing: -0.5px;
   text-shadow: 0 3px 22px rgba(0, 0, 0, 0.45);
+  overflow-wrap: anywhere;
 }
 .heroText {
   margin: 0 auto 32px;
@@ -401,6 +405,7 @@
   position: relative;
   padding: 130px 0 90px;
   background: var(--a-blue-soft);
+  scroll-margin-top: calc(var(--nav-h, 72px) + 8px);
 }
 /* wavy top edge into the section */
 .historyWrap::before {
@@ -499,6 +504,7 @@
   font-size: 19px;
   font-weight: 700;
   color: var(--a-navy);
+  overflow-wrap: anywhere;
 }
 .step p {
   margin: 0;
@@ -602,6 +608,7 @@
   padding: 100px 0;
   background: linear-gradient(160deg, var(--a-navy) 0%, var(--a-blue-dark) 100%);
   overflow: hidden;
+  scroll-margin-top: calc(var(--nav-h, 72px) + 8px);
 }
 .campusesWrap::before {
   content: "";
@@ -670,6 +677,7 @@
   font-size: 20px;
   font-weight: 700;
   color: var(--a-navy);
+  overflow-wrap: anywhere;
 }
 .campus p {
   margin: 0;
@@ -842,6 +850,9 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
+  .hero {
+    padding: 130px 0 190px;
+  }
   .stats {
     grid-template-columns: repeat(2, 1fr);
     margin-top: -90px;
@@ -887,16 +898,38 @@
   .hero::before {
     height: 120px;
   }
+  .heroActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btnPrimary,
+  .btnGhost,
+  .cta .btnLight {
+    width: 100%;
+  }
+  .heading {
+    letter-spacing: 0;
+  }
   .stats,
   .pillars,
   .factList {
     grid-template-columns: 1fr;
   }
+  .stats {
+    gap: 16px;
+    padding-bottom: 0;
+  }
   .stat:nth-child(even) {
     transform: none;
   }
-  .stats {
-    padding-bottom: 0;
+  .intro::before {
+    right: -200px;
+  }
+  .introVisual {
+    padding-left: 0;
+  }
+  .floatBadge {
+    min-width: 0;
   }
   .pillarsWrap,
   .campusesWrap {
@@ -933,7 +966,9 @@
     transition: none;
   }
   .campus,
-  .chips li {
+  .chips li,
+  .visualImg,
+  .shot .photoFill {
     transition: none;
   }
 }
