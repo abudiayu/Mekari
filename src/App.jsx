@@ -17,6 +17,7 @@ import Events from './ListNavebars/Events/Events';
 import Loding from './components/Loding/Loding';
 import About from './pages/About/About';
 import MissionVision from './components/Mission/MissionVision';
+import Leadership from './components/Leaderships/Leadership';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -52,6 +53,7 @@ function App() {
             <Route path="/events" element={<Events />} />
             <Route path="/about" element={<About />} />
             <Route path='/mission' element={<MissionVision/>}/>
+            <Route path='/leader' element={<Leadership/>}/>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -47,7 +47,7 @@ const NAV_ITEMS = [
     links: [
       { label: 'About the University', to: '/about' },
       { label: 'Vision & Mission', to: '/mission' },
-      { label: 'Leadership', to: '/#' },
+      { label: 'Leadership', to: '/leader' },
       { label: 'Contact Us', to: '/#' },
     ],
   },
