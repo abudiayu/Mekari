@@ -54,10 +54,10 @@ const NAV_ITEMS = [
   {
     label: 'Admission',
     links: [
-      { label: 'Undergraduate', to: '/#' },
-      { label: 'Postgraduate', to: '/#' },
-      { label: 'Admission Requirements', to: '/#' },
-      { label: 'Scholarships', to: '/#' },
+      { label: 'Undergraduate', to: '/studentlife' },
+      { label: 'Postgraduate', to: '/alumni' },
+      { label: 'Admission Requirements', to: '/contact' },
+      { label: 'Scholarships', to: '/scholarship' },
     ],
   },
   {

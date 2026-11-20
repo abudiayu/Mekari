@@ -19,6 +19,7 @@ import About from './pages/About/About';
 import MissionVision from './components/Mission/MissionVision';
 import Leadership from './components/Leaderships/Leadership';
 import Contact from "./components/Contact/Contact";
+import Scholarships from './pages/Scholarships/Scholarships';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -56,6 +57,7 @@ function App() {
             <Route path='/mission' element={<MissionVision/>}/>
             <Route path='/leader' element={<Leadership/>}/>
             <Route path= "/contact" element= {<Contact/>}/>
+            <Route path='/scholarship' element= {<Scholarships/>}/>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
