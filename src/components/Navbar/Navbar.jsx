@@ -64,14 +64,15 @@ const NAV_ITEMS = [
     label: 'Academics',
     heading: 'Colleges',
     links: [
-      { label: 'Informatics', to: '/#' },
-      { label: 'Engineering', to: '/#' },
+      { label: 'Kombolicha Academics', to: '/kiot' },
+      { label: 'Dessie Academics', to: '/dessie' },
+      { label: 'Tita Academics', to: '/tita' },
     ],
   },
   {
     label: 'Research',
     links: [
-      { label: 'Research Groups', to: '/#' },
+      { label: 'Research Groups', to: '/kombolicha' },
       { label: 'Publications', to: '/#' },
       { label: 'Research Projects', to: '/#' },
     ],

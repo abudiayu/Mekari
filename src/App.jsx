@@ -20,6 +20,7 @@ import MissionVision from './components/Mission/MissionVision';
 import Leadership from './components/Leaderships/Leadership';
 import Contact from "./components/Contact/Contact";
 import Scholarships from './pages/Scholarships/Scholarships';
+import Kombolcha from './components/Academy/Kombolicha/Kombolicha';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -58,6 +59,7 @@ function App() {
             <Route path='/leader' element={<Leadership/>}/>
             <Route path= "/contact" element= {<Contact/>}/>
             <Route path='/scholarship' element= {<Scholarships/>}/>
+            <Route path='/kiot' element= {<Kombolcha/>}/>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
