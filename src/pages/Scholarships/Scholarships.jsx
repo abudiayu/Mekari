@@ -1,7 +1,18 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import styles from "./Scholarships.module.css";
 
-const NAV = ["About", "Campuses", "Scholarships", "Events", "Resources", "Contact"];
+const NAV = [
+  { label: "About", to: "/about" },
+  { label: "Campuses", to: "/campuses" },
+  { label: "Scholarships", to: "/scholarships" },
+  { label: "Events", to: "/events" },
+  { label: "Resources", to: "/resources" },
+  { label: "Contact", to: "/contact" },
+];
+
+/* Put your image in the public folder: public/images/wollo-hero.jpg */
+const HERO_IMAGE = "https://i.pinimg.com/736x/51/46/2b/51462bff02c31d97324d43de3928996d.jpg";
 
 /* Wollo University has three campuses */
 const CAMPUSES = ["Dessie Campus", "Kombolcha Institute of Technology", "Tertiary Care Campus"];
@@ -158,6 +169,13 @@ export default function Scholarships() {
     [campus, type]
   );
 
+  /* Smooth scroll to #find / #apply when the hash changes */
+  const { hash, key } = useLocation();
+  useEffect(() => {
+    if (!hash) return;
+    document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [hash, key]);
+
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
@@ -169,20 +187,6 @@ export default function Scholarships() {
 
   return (
     <div className={styles.page}>
-      {/* ---------- Header ---------- */}
-      <header className={styles.header}>
-        <a href="/" className={styles.logo}>
-          Wollo University
-          <span>Scholarships</span>
-        </a>
-        <nav className={styles.nav} aria-label="Main">
-          {NAV.map((n) => (
-            <a key={n} href="#" className={n === "Scholarships" ? styles.navActive : undefined}>
-              {n}
-            </a>
-          ))}
-        </nav>
-      </header>
 
       {/* ---------- Hero ---------- */}
       <section className={styles.hero}>
@@ -195,8 +199,8 @@ export default function Scholarships() {
             students who learn by doing.
           </p>
           <div className={styles.heroActions}>
-            <a href="#find" className={styles.btnPrimary}>See open scholarships</a>
-            <a href="#apply" className={styles.btnGhost}>Register your interest</a>
+            <Link to={{ hash: "#find" }} className={styles.btnPrimary}>See open scholarships</Link>
+            <Link to={{ hash: "#apply" }} className={styles.btnGhost}>Register your interest</Link>
           </div>
           <ul className={styles.trust}>
             <li><Icon name="cap" /> Open to all campuses</li>
@@ -205,16 +209,24 @@ export default function Scholarships() {
           </ul>
         </div>
 
-        <aside className={styles.heroCard} aria-label="Next closing deadline">
-          <span className={styles.heroCardLabel}>Closing soon</span>
-          <h2>AppFactory Builders Scholarship</h2>
-          <p>Kombolcha Institute of Technology · Informatics</p>
-          <div className={styles.heroCardAmount}>Stipend + laptop support</div>
-          <div className={styles.heroCardMeta}>
-            <Icon name="cal" /> Deadline 15 Jan 2027
-          </div>
-          <a href="#find" className={styles.btnGold}>View details</a>
-        </aside>
+        <div className={styles.heroMedia}>
+          <img
+            className={styles.heroImage}
+            src={HERO_IMAGE}
+            alt="Wollo University students working together on campus"
+            loading="eager"
+          />
+          <aside className={styles.heroCard} aria-label="Next closing deadline">
+            <span className={styles.heroCardLabel}>Closing soon</span>
+            <h2>AppFactory Builders Scholarship</h2>
+            <p>Kombolcha Institute of Technology · Informatics</p>
+            <div className={styles.heroCardAmount}>Stipend + laptop support</div>
+            <div className={styles.heroCardMeta}>
+              <Icon name="cal" /> Deadline 15 Jan 2027
+            </div>
+            <Link to={{ hash: "#find" }} className={styles.btnGold}>View details</Link>
+          </aside>
+        </div>
       </section>
 
       {/* ---------- Stats ---------- */}
@@ -276,7 +288,7 @@ export default function Scholarships() {
                 <div><dt>Award</dt><dd>{s.amount}</dd></div>
                 <div><dt>Deadline</dt><dd>{s.deadline}</dd></div>
               </dl>
-              <a href="#apply" className={styles.cardLink}>Register interest</a>
+              <Link to={{ hash: "#apply" }} className={styles.cardLink}>Register interest</Link>
             </article>
           ))}
           {list.length === 0 && (
