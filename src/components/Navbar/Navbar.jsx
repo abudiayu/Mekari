@@ -72,7 +72,7 @@ const NAV_ITEMS = [
   {
     label: 'Research',
     links: [
-      { label: 'Research Groups', to: '/kombolicha' },
+      { label: 'Research Groups', to: '/researchgroup' },
       { label: 'Publications', to: '/#' },
       { label: 'Research Projects', to: '/#' },
     ],
