@@ -14,6 +14,7 @@
   --muted: #5d716b;
   --line: #e1ebe6;
   --gold: #f2c14e;
+  padding-top:4%;
 
   font-family: "Plus Jakarta Sans", system-ui, sans-serif;
   color: var(--ink);
