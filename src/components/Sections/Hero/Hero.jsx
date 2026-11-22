@@ -32,21 +32,22 @@ export default function Hero() {
 
         <div className={styles['nx-headline-mask']}>
           <h1 className={styles['nx-headline']}>
-            Knowledge, <span className={styles['nx-headline-gold']} style={{ color: '#1a5fa8' }}>Innovation</span>, <br /> Excellence
+            Knowledge, <span className={styles['nx-headline-gold']}>Innovation</span>, <br /> Excellence
           </h1>
         </div>
 
         <p className={styles['nx-lede']}>{t('Ai modeled Platform')}</p>
 
         <div className={styles['nx-cta-group']}>
-          <Link
+          {/* External site: a plain <a>, because <Link to="https://..."> can build a broken relative URL */}
+          <a
             className={`${styles['nx-cta']} ${styles['nx-cta-primary']}`}
-            to="https://wollo-info-hub.vercel.app/"
+            href="https://wollo-info-hub.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
           >
             <span>{t('Ask KIKI AI')}</span>
-          </Link>
+          </a>
           <Link className={`${styles['nx-cta']} ${styles['nx-cta-ghost']}`} to="/auth">
             <span>Student Portal &rarr;</span>
           </Link>
@@ -56,9 +57,9 @@ export default function Hero() {
       {/* Stats bar */}
       <div className={styles['nx-stats-bar']}>
         <span>25K+ Students</span>
-        <span className={styles['nx-stat-dot']}>•</span>
+        <span className={styles['nx-stat-dot']} aria-hidden="true">•</span>
         <span>80+ Programs</span>
-        <span className={styles['nx-stat-dot']}>•</span>
+        <span className={styles['nx-stat-dot']} aria-hidden="true">•</span>
         <span>40 Years</span>
       </div>
 

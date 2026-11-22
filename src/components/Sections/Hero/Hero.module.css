@@ -1,19 +1,30 @@
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&family=Inter:wght@400;500;600;700&display=swap");
 
-/* ── Hero section ── */
+/* ── Hero section ──
+   The copy and the stats bar are now normal flex children (not absolutely
+   positioned), so they can never overlap on short or narrow screens.
+   The hero grows taller if its content needs the room. */
 .nx-hero {
   /* scale unit: 1px at 1440px wide, clamped so text never gets tiny/huge */
   --u: clamp(0.8px, 0.0694vw, 1.15px);
 
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   width: 100%;
   min-width: 0;
   max-width: 100%;
   margin: 0;
   box-sizing: border-box;
-  height: 74vh;
-  height: 95dvh;
+  height: auto;
   min-height: 560px;
+  min-height: max(560px, 74vh);
+  min-height: max(560px, 95dvh);
+  padding:
+    max(calc(128 * var(--u)), 96px)
+    calc(46 * var(--u))
+    calc(clamp(50px, 8vw, 100px) + 24px);
   overflow: hidden;
   background: #1d8fb8;
 }
@@ -128,14 +139,12 @@
 
 /* ── Hero copy ── */
 .nx-copy {
-  position: absolute;
-  left: calc(46 * var(--u));
-  top: calc(128 * var(--u));
+  position: relative;
   z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  max-width: calc(100% - 2 * 46 * var(--u));
+  max-width: 100%;
 }
 
 .nx-eyebrow {
@@ -143,11 +152,11 @@
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: calc(13.5 * var(--u));
   font-weight: 600;
-  line-height: 1;
+  line-height: 1.2;
   letter-spacing: 0.16em;
   color: #ffffff;
   text-transform: uppercase;
-  white-space: nowrap;
+  white-space: normal;
   margin: 0 0 calc(18 * var(--u));
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 }
@@ -171,16 +180,21 @@
   text-wrap: balance;
 }
 
+/* "Innovation": blue italic text on a white highlight.
+   The old gradient + transparent text fill hid the white background,
+   so the text fill is now set to solid blue. */
 .nx-headline-gold {
+  display: inline;
   font-style: italic;
   font-weight: 600;
-  background: linear-gradient(180deg, #1a5fa8 0%, #164f8c 55%, #103b6b 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  color: #1a5fa8;
+  -webkit-text-fill-color: #1a5fa8;
+  background: #ffffff;
+  /* padding: 0.02em 0.16em 0.04em 0.1em; */
+  border-radius: 0.14em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
   text-shadow: none;
-  padding-right: 0.06em;
 }
 
 .nx-lede {
@@ -260,12 +274,14 @@
   outline-offset: 3px;
 }
 
-/* ── Stats bar ── */
+/* ── Stats bar ──
+   margin-top:auto pushes it to the bottom of the hero when there is
+   spare room; padding-top guarantees a gap above it when there is not. */
 .nx-stats-bar {
-  position: absolute;
-  left: calc(46 * var(--u));
-  bottom: calc(clamp(50px, 8vw, 100px) + 18px);
+  position: relative;
   z-index: 2;
+  margin-top: auto;
+  padding-top: calc(36 * var(--u));
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -308,10 +324,11 @@
 /* ── Portrait / narrow responsive ── */
 @media (max-aspect-ratio: 5/4) {
   .nx-hero {
-    height: auto;
     min-height: unset;
-    padding-top: clamp(64px, 12vh, 92px);
-    padding-bottom: clamp(40px, 6vh, 64px);
+    padding:
+      clamp(64px, 12vh, 92px)
+      calc(46 * var(--u))
+      calc(clamp(34px, 8vw, 60px) + 28px);
   }
 
   .nx-bg video {
@@ -335,19 +352,9 @@
     );
   }
 
-  .nx-copy {
-    position: relative;
-    left: auto;
-    top: auto;
-    margin-left: calc(46 * var(--u));
-    max-width: calc(100% - 2 * 46 * var(--u));
-  }
-
   .nx-stats-bar {
-    position: relative;
-    left: auto;
-    bottom: auto;
-    margin: calc(34 * var(--u)) 0 0 calc(46 * var(--u));
+    margin-top: calc(34 * var(--u));
+    padding-top: 0;
   }
 
   .nx-hero-wave-svg {
@@ -364,12 +371,6 @@
 
   .nx-lede {
     max-width: 34ch;
-  }
-}
-
-@media (max-height: 620px) and (max-aspect-ratio: 5/4) {
-  .nx-eyebrow {
-    margin-top: clamp(10px, 2.5vh, 20px);
   }
 }
 
@@ -425,20 +426,12 @@
   }
 
   .nx-copy {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
     margin: 0 !important;
     max-width: 100% !important;
     width: 100%;
   }
 
   .nx-eyebrow {
-    position: relative !important;
-    z-index: 2;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
     margin: 0 !important;
     padding: 0 !important;
     font-size: clamp(10.5px, 2.9vw, 13px) !important;
@@ -448,17 +441,10 @@
     color: #ffffff !important;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35) !important;
     white-space: normal !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
 
   .nx-headline-mask {
-    position: relative !important;
-    z-index: 2;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
     width: 100% !important;
     margin: clamp(10px, 2vh, 16px) 0 0 !important;
     padding: 0 !important;
@@ -472,13 +458,12 @@
     font-family: "Playfair Display", Georgia, serif !important;
     font-size: clamp(28px, 8.6vw, 50px) !important;
     font-weight: 500 !important;
-    line-height: 1.08 !important;
+    line-height: 1.12 !important;
     letter-spacing: -0.005em !important;
     color: #ffffff !important;
     text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35) !important;
     text-wrap: balance;
-    overflow-wrap: anywhere;
-    hyphens: auto;
+    overflow-wrap: break-word;
     max-width: 100% !important;
   }
 
@@ -487,11 +472,6 @@
   }
 
   .nx-lede {
-    position: relative !important;
-    z-index: 2;
-    left: auto !important;
-    right: auto !important;
-    top: auto !important;
     width: auto !important;
     max-width: 42ch !important;
     margin: clamp(14px, 2.4vh, 20px) 0 0 !important;
@@ -506,10 +486,6 @@
   }
 
   .nx-cta-group {
-    position: relative !important;
-    z-index: 2;
-    left: auto !important;
-    top: auto !important;
     display: flex !important;
     flex-wrap: wrap !important;
     gap: 10px !important;
@@ -517,10 +493,6 @@
   }
 
   .nx-cta {
-    position: relative !important;
-    z-index: 2;
-    left: auto !important;
-    top: auto !important;
     width: auto !important;
     height: auto !important;
     min-width: 130px !important;
@@ -534,7 +506,6 @@
   }
 
   .nx-cta span {
-    position: static !important;
     font-size: clamp(13.5px, 3.7vw, 15px) !important;
     font-weight: 600 !important;
     line-height: 1.2 !important;
@@ -546,10 +517,8 @@
   .nx-cta-ghost span { color: #ffffff !important; font-weight: 500 !important; }
 
   .nx-stats-bar {
-    position: relative !important;
-    left: auto !important;
-    bottom: auto !important;
     margin: clamp(24px, 4vh, 34px) 0 0 !important;
+    padding: 0 !important;
     gap: 8px !important;
     font-size: clamp(12px, 3.3vw, 14px) !important;
   }
