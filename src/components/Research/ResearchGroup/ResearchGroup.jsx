@@ -1,11 +1,26 @@
 import { useState, useEffect, useRef } from "react";
 import styles from "./ResearchGroup.module.css";
 
-/* Optional: put a photo in public/images/research-hero.jpg and set the path here.
-   If empty, the hero shows a contour-map illustration of the Wollo highlands. */
+/* ---------- Images ----------
+   Put your photos in public/images/ and use the paths below.
+   Every picture on the page is a real image file (no SVG or CSS drawings). */
 const HERO_IMAGE = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQzElvWJJRbQaxLcfVEmmg0Dlbu3UscjzXSVFxs0E0BJ4NfbWkaYaO6-eO&s=10";
 
-const RESEARCH_OFFICE_URL = "https://wu.edu.et/?p=177";
+/* "About our research" picture (left side of the green band) */
+const ABOUT_IMAGE = "https://i.pinimg.com/1200x/34/9a/f2/349af23efa5223d1c9c51ea0f4cfb705.jpg";
+const ABOUT_ALT = "Wollo University campus in the highlands of Dessie";
+
+/* "The people behind the research" pictures, one per tile */
+const PHOTOS = {
+  lab: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTST91ZvXIrnjBQ3Twbx8GfbFmGaiwVH0-XCNIljhZgCKp0pVF2Do3z_c&s=10",
+  field: "https://wu.edu.et/wp-content/uploads/2025/06/505501757_1129125229258911_4963964905524207028_n.jpg",
+  grads: "https://wu.edu.et/kiot/wp-content/uploads/slider/cache/906dc666f0ef065310e1e12775a526bc/314371399_3341247012784421_4376461732623549299_n-min.jpg",
+  culture: "https://www.aum.edu.kw/azure/files/ContentPhotos/Photos/Cover_052014..JPG?w=780&h=520&scale=both&mode=crop",
+  tech: "https://static.wixstatic.com/media/118341_b124faf4e2b8400a8ebfca993a20ad44~mv2.jpg/v1/fill/w_1280,h_853,al_c,q_85,enc_auto/118341_b124faf4e2b8400a8ebfca993a20ad44~mv2.jpg",
+  clinic: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSv6a-VvKUM790gzPuEEzhn4oiCpZpg1zxu1QqtEpQXBRjqUnvmOm4Buew&s=10",
+};
+
+const RESEARCH_OFFICE_URL = "/contact";
 const NEWS_URL = "https://wu.edu.et/author/admin/page/7";
 
 /* ---------- Tiny icon set ---------- */
@@ -192,11 +207,6 @@ const GOALS = [
   "Share results through conferences and workshops",
 ];
 
-/* ====================== New sections (stats, people, journey, FAQ) ====================== */
-/* Drop real photos in public/images/ and put the path here to replace an illustration.
-   Keys match the scene ids below. Example: { lab: "/images/eohrti-lab.jpg" } */
-const PHOTOS = {};
-
 /* ---------- Stats (counts up once when scrolled into view) ---------- */
 const STATS = [
   { n: 2005, label: "Year Wollo University was founded", plain: true },
@@ -244,71 +254,25 @@ function Stats() {
   );
 }
 
-/* ---------- Illustrated people ---------- */
-function Person({ x, y = 0, skin, hair, cloth, style = "short", scale = 1, coat }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${scale})`}>
-      <path d="M-62 150 C-62 100 -34 82 0 82 C34 82 62 100 62 150Z" fill={cloth} />
-      {coat && <path d="M-62 150 C-62 100 -34 82 0 82 L0 150Z" fill={coat} opacity=".55" />}
-      <rect x="-9" y="66" width="18" height="22" rx="8" fill={skin} />
-      {style === "long" && <path d="M-34 40 C-40 90 -34 100 -22 104 L22 104 C34 100 40 90 34 40Z" fill={hair} />}
-      <ellipse cx="0" cy="42" rx="27" ry="31" fill={skin} />
-      {style === "short" && <path d="M-28 38 C-30 8 30 8 28 38 C20 24 -20 24 -28 38Z" fill={hair} />}
-      {style === "long" && <path d="M-29 40 C-34 6 34 6 29 40 C22 22 -20 20 -29 40Z" fill={hair} />}
-      {style === "scarf" && <path d="M-31 36 C-34 4 34 4 31 36 C34 66 20 76 0 76 C-20 76 -34 66 -31 36Z" fill={hair} />}
-      {style === "scarf" && <ellipse cx="0" cy="44" rx="19" ry="23" fill={skin} />}
-      <circle cx="-9" cy="44" r="2.4" fill="#12302a" /><circle cx="9" cy="44" r="2.4" fill="#12302a" />
-      <path d="M-8 56 Q0 63 8 56" stroke="#12302a" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-    </g>
-  );
-}
-
-const SKIN = ["#8a5a3c", "#6e4430", "#a8704a", "#5a3626"];
+/* ---------- People photos ---------- */
 const SCENES = [
-  { id: "lab", title: "One Health laboratory", sub: "EOHRTI, Dessie", bg: ["#d8f0e4", "#8fc9b4"], extra: "flask",
-    people: [[110, SKIN[0], "#1c1c1c", "short", "#ffffff", "#d4eadf"], [250, SKIN[2], "#2a1a12", "long", "#ffffff", "#d4eadf"]] },
-  { id: "field", title: "Basin field work", sub: "Abay-Awash Basins, South Wollo", bg: ["#fdeccb", "#9bc9a8"], extra: "hills",
-    people: [[120, SKIN[1], "#1c1c1c", "short", "#c8452f"], [260, SKIN[0], "#241812", "short", "#2870b8"]] },
-  { id: "grads", title: "Postgraduate research methods", sub: "Nursing, midwifery, environmental health", bg: ["#dfeefb", "#a9c9ee"], extra: "board",
-    people: [[80, SKIN[2], "#1c1c1c", "long", "#6c4bc2"], [190, SKIN[0], "#1c1c1c", "short", "#0d3b2e"], [300, SKIN[3], "#3a2418", "scarf", "#14604a"]] },
-  { id: "culture", title: "Tezeta, Bati and Ambasel", sub: "Institute of Culture and Art, Dessie", bg: ["#ece6fb", "#c3b2ee"], extra: "music",
-    people: [[130, SKIN[1], "#1c1c1c", "short", "#f2c14e"], [260, SKIN[2], "#2a1a12", "scarf", "#c8452f"]] },
-  { id: "tech", title: "Engineering and informatics", sub: "Kombolcha Institute of Technology", bg: ["#d6f2f1", "#7fc7c9"], extra: "chip",
-    people: [[120, SKIN[0], "#1c1c1c", "short", "#0d3b2e"], [260, SKIN[3], "#241812", "long", "#a56a05"]] },
-  { id: "clinic", title: "Clinical and public health", sub: "Tertiary Care Campus, Tita", bg: ["#fde1dc", "#f0a99c"], extra: "cross",
-    people: [[110, SKIN[2], "#1c1c1c", "short", "#ffffff", "#2f9a78"], [250, SKIN[1], "#2a1a12", "scarf", "#ffffff", "#2f9a78"]] },
+  { id: "lab", title: "One Health laboratory", sub: "EOHRTI, Dessie", alt: "Researchers working in the One Health laboratory in Dessie" },
+  { id: "field", title: "Basin field work", sub: "Abay-Awash Basins, South Wollo", alt: "Field researchers working in the Abay-Awash basins of South Wollo" },
+  { id: "grads", title: "Postgraduate research methods", sub: "Nursing, midwifery, environmental health", alt: "Postgraduate students in a research methods workshop" },
+  { id: "culture", title: "Tezeta, Bati and Ambasel", sub: "Institute of Culture and Art, Dessie", alt: "Artists performing at the Institute of Culture and Art in Dessie" },
+  { id: "tech", title: "Engineering and informatics", sub: "Kombolcha Institute of Technology", alt: "Students and staff at Kombolcha Institute of Technology" },
+  { id: "clinic", title: "Clinical and public health", sub: "Tertiary Care Campus, Tita", alt: "Clinicians and students at the Tertiary Care Campus in Tita" },
 ];
 
-function Extra({ kind }) {
-  const c = "#12302a";
-  if (kind === "flask") return <g fill="none" stroke={c} strokeWidth="3" opacity=".35"><path d="M300 30h30M308 30v34l-22 40a8 8 0 0 0 7 12h46a8 8 0 0 0 7-12l-22-40V30" /></g>;
-  if (kind === "hills") return <g opacity=".5"><path d="M0 150L70 90 130 130 210 70 300 140 360 100V170H0Z" fill="#2f7d63" /><circle cx="310" cy="40" r="20" fill="#fff6dc" /></g>;
-  if (kind === "board") return <g opacity=".35"><rect x="20" y="22" width="110" height="60" rx="6" fill="none" stroke={c} strokeWidth="3" /><path d="M34 44h60M34 60h80" stroke={c} strokeWidth="3" /></g>;
-  if (kind === "music") return <g fill="none" stroke={c} strokeWidth="3" opacity=".35"><path d="M300 90V30l34-8v60" /><circle cx="290" cy="92" r="10" fill={c} /><circle cx="324" cy="84" r="10" fill={c} /></g>;
-  if (kind === "chip") return <g fill="none" stroke={c} strokeWidth="3" opacity=".35"><rect x="300" y="28" width="44" height="44" rx="6" /><path d="M312 16v12M332 16v12M312 72v12M332 72v12M288 40h12M288 60h12M344 40h12M344 60h12" /></g>;
-  return <g fill={c} opacity=".28"><rect x="310" y="26" width="16" height="52" rx="3" /><rect x="292" y="44" width="52" height="16" rx="3" /></g>;
-}
-
-function Scene({ s, big }) {
-  const photo = PHOTOS[s.id];
+function Scene({ s }) {
   return (
-    <figure className={`${styles.scene} ${big ? styles.sceneBig : ""}`}>
-      {photo ? (
-        <img src={photo} alt={s.title} loading="lazy" />
-      ) : (
-        <svg viewBox="0 0 380 240" preserveAspectRatio="xMidYMax slice" role="img" aria-label={`${s.title}: illustration of Wollo University students and researchers`}>
-          <defs>
-            <linearGradient id={`g-${s.id}`} x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor={s.bg[0]} /><stop offset="1" stopColor={s.bg[1]} />
-            </linearGradient>
-          </defs>
-          <rect width="380" height="240" fill={`url(#g-${s.id})`} />
-          <Extra kind={s.extra} />
-          {s.people.map(([x, skin, hair, style, cloth, coat], i) => (
-            <Person key={i} x={x} y={92} skin={skin} hair={hair} style={style} cloth={cloth} coat={coat} scale={1.05} />
-          ))}
-        </svg>
-      )}
+    <figure className={styles.scene}>
+      <img
+        src={PHOTOS[s.id]}
+        alt={s.alt}
+        loading="lazy"
+        onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
+      />
       <figcaption><strong>{s.title}</strong><span>{s.sub}</span></figcaption>
     </figure>
   );
@@ -322,7 +286,7 @@ function Faces() {
         <p>Students, lab teams, field researchers and artists across Dessie, Kombolcha and Tita.</p>
       </div>
       <div className={styles.mosaic}>
-        {SCENES.map((s, i) => <Scene key={s.id} s={s} big={i === 2} />)}
+        {SCENES.map((s) => <Scene key={s.id} s={s} />)}
       </div>
     </section>
   );
@@ -374,11 +338,19 @@ function Faq() {
 export default function ResearchGroup() {
   const [campus, setCampus] = useState("All");
   const [active, setActive] = useState(null);
+  const closeRef = useRef(null);
+  const lastFocus = useRef(null);
 
   const visible = GROUPS.filter((g) => campus === "All" || g.campus === campus);
 
+  const openGroup = (g, e) => {
+    lastFocus.current = e.currentTarget;
+    setActive(g);
+  };
+
   useEffect(() => {
     if (!active) return undefined;
+    closeRef.current?.focus();
     const onKey = (e) => e.key === "Escape" && setActive(null);
     document.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
@@ -386,6 +358,7 @@ export default function ResearchGroup() {
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
+      lastFocus.current?.focus?.();
     };
   }, [active]);
 
@@ -423,23 +396,7 @@ export default function ResearchGroup() {
         </div>
 
         <div className={styles.heroArt}>
-          {HERO_IMAGE ? (
-            <img src={HERO_IMAGE} alt="" />
-          ) : (
-            <svg viewBox="0 0 600 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-              <rect width="600" height="520" fill="#0d3b2e" />
-              {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <path
-                  key={i}
-                  d={`M${-40 + i * 6} ${300 - i * 22} C ${120 + i * 14} ${170 - i * 16}, ${260 - i * 8} ${400 - i * 30}, ${380 + i * 8} ${260 - i * 14} S ${560 - i * 6} ${150 + i * 10}, 660 ${210 - i * 6}`}
-                  fill="none" stroke="#7fd1b0" strokeOpacity={0.14 + i * 0.05} strokeWidth="1.4"
-                />
-              ))}
-              <circle cx="330" cy="250" r="9" fill="#f2c14e" />
-              <circle cx="330" cy="250" r="22" fill="none" stroke="#f2c14e" strokeOpacity=".5" />
-              <circle cx="330" cy="250" r="40" fill="none" stroke="#f2c14e" strokeOpacity=".22" />
-            </svg>
-          )}
+          <img src={HERO_IMAGE} alt="Aerial view of the Wollo University campus in Dessie" />
 
           <span className={styles.script}>
             Rooted in Wollo,
@@ -476,12 +433,11 @@ export default function ResearchGroup() {
             Choose a campus to see who works where. Select a group to read what it studies.
           </p>
 
-          <div className={styles.filters} role="tablist" aria-label="Filter by campus">
+          <div className={styles.filters} role="group" aria-label="Filter by campus">
             {CAMPUS_FILTERS.map((c) => (
               <button
                 key={c}
-                role="tab"
-                aria-selected={campus === c}
+                aria-pressed={campus === c}
                 className={campus === c ? styles.filterOn : styles.filter}
                 onClick={() => setCampus(c)}
               >
@@ -497,7 +453,7 @@ export default function ResearchGroup() {
 
         <div className={styles.cards}>
           {visible.map((g) => (
-            <button key={g.id} className={styles.card} onClick={() => setActive(g)}>
+            <button key={g.id} className={styles.card} onClick={(e) => openGroup(g, e)}>
               <span className={`${styles.bubble} ${styles[g.tone]}`}>
                 <Icon name={g.icon} />
               </span>
@@ -526,18 +482,12 @@ export default function ResearchGroup() {
       {/* ---------- About band ---------- */}
       <section className={styles.about}>
         <div className={styles.aboutVisual}>
-          <svg viewBox="0 0 520 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-            <defs>
-              <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stopColor="#f6d9a8" />
-                <stop offset="1" stopColor="#8fc9b4" />
-              </linearGradient>
-            </defs>
-            <rect width="520" height="380" fill="url(#sky)" />
-            <path d="M0 270 L90 190 L170 250 L270 140 L370 240 L450 180 L520 230 V380 H0Z" fill="#2f7d63" />
-            <path d="M0 320 L110 250 L210 305 L320 220 L430 300 L520 260 V380 H0Z" fill="#0d3b2e" />
-            <circle cx="400" cy="90" r="34" fill="#fff6dc" opacity=".9" />
-          </svg>
+          <img
+            src={ABOUT_IMAGE}
+            alt={ABOUT_ALT}
+            loading="lazy"
+            onError={(e) => { e.currentTarget.style.visibility = "hidden"; }}
+          />
           <div className={styles.badge}>
             <strong>14</strong>
             <span>colleges, institutes and schools across 3 campuses</span>
@@ -617,7 +567,7 @@ export default function ResearchGroup() {
             training and community projects.
           </p>
         </div>
-        <a href={RESEARCH_OFFICE_URL} target="_blank" rel="noreferrer" className={styles.btnWhite}>
+        <a href={RESEARCH_OFFICE_URL}   className={styles.btnWhite}>
           Get in touch <Icon name="arrow" size={16} />
         </a>
       </section>
@@ -632,7 +582,7 @@ export default function ResearchGroup() {
             aria-labelledby="group-title"
             onClick={(e) => e.stopPropagation()}
           >
-            <button className={styles.close} onClick={() => setActive(null)} aria-label="Close details">
+            <button ref={closeRef} className={styles.close} onClick={() => setActive(null)} aria-label="Close details">
               <Icon name="close" size={20} />
             </button>
 
